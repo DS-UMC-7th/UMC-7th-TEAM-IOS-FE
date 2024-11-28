@@ -1,0 +1,39 @@
+# macOS 시스템 파일
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Xcode 사용자 설정 및 빌드 산출물
+xcuserdata/
+*.xcuserstate
+DerivedData/
+Build/
+
+# Xcode 작업 공간 파일
+*.xcworkspace
+
+# 로그 및 임시 파일
+*.xcactivitylog
+*.xccheckout
+*.moved-aside
+*.swp
+*.lock
+*.tmp
+*.bak
+*.orig
+
+# Scheme 관련 파일
+*.xcscheme
+*.xcschememanagement.plist
+
+# Swift Package Manager 관련
+.build/
+
+# 앱 상태 저장 및 아카이브 파일
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
