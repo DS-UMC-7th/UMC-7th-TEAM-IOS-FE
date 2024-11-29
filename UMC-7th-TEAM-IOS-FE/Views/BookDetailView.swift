@@ -15,6 +15,7 @@ class BookDetailView: UIView {
         self.backgroundColor = .white
         setupSubviews()
         setupGraphUI()
+        setupSortButton()//정렬 버튼 UI
         setupConstraints()
     }
     
@@ -38,6 +39,7 @@ class BookDetailView: UIView {
         ratingContainerView.addSubview(averageRatingLabel)
         ratingContainerView.addSubview(totalReviewsLabel)
         ratingContainerView.addSubview(ratingGraphStackView)
+        
     }
     
     // 남색 배경 영역
@@ -184,6 +186,54 @@ class BookDetailView: UIView {
         }
     }
     
+    
+    // 정렬 버튼 뷰
+    private let sortButton = UIButton().then {
+        $0.setTitle("별점 높은 순", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        $0.contentHorizontalAlignment = .center
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.lightGray.cgColor
+        $0.layer.cornerRadius = 4
+        $0.backgroundColor = .white
+        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        $0.semanticContentAttribute = .forceRightToLeft
+    }
+    
+    // 정렬 메뉴 컨테이너
+    private let sortMenuView = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.lightGray.cgColor
+        $0.layer.cornerRadius = 4
+        $0.isHidden = true
+    }
+    
+    // 정렬 메뉴 항목
+    private let sortOptions = ["별점 높은 순", "최신 순", "공감 많은 순"]
+    private var sortOptionButtons: [UIButton] = []
+    
+    //정렬 버튼 UI
+    private func setupSortButton() {
+            // 정렬 버튼 추가
+            self.addSubview(sortButton)
+            
+            // 정렬 메뉴 옵션 추가
+            self.addSubview(sortMenuView)
+            sortOptions.forEach { option in
+                let button = UIButton().then {
+                    $0.setTitle(option, for: .normal)
+                    $0.setTitleColor(.black, for: .normal)
+                    $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+                    $0.contentHorizontalAlignment = .left
+                    $0.backgroundColor = .white
+                }
+                sortMenuView.addSubview(button)
+                sortOptionButtons.append(button)
+            }
+        }
+    
     //레이아웃 설정
     private func setupConstraints() {
         //프로필 이미지 UI 구성
@@ -267,6 +317,34 @@ class BookDetailView: UIView {
         ratingGraphStackView.snp.makeConstraints {
             $0.top.equalTo(totalReviewsLabel.snp.bottom).offset(16)
             $0.left.right.equalTo(ratingContainerView).inset(16)
+        }
+        
+        // 정렬 버튼 레이아웃
+        sortButton.snp.makeConstraints {
+            $0.width.equalTo(96)
+            $0.height.equalTo(20)
+            $0.top.equalTo(ratingContainerView.snp.bottom).offset(20)
+            $0.right.equalToSuperview().offset(-20)
+        }
+        
+        // 정렬 메뉴 옵션 레이아웃
+        for (index, button) in sortOptionButtons.enumerated() {
+            button.snp.makeConstraints {
+                $0.left.right.equalToSuperview().inset(8)
+                $0.height.equalTo(20)
+                $0.top.equalToSuperview().offset(index * 25)
+            }
+        }
+        
+        // 정렬 메뉴 컨테이너 레이아웃
+        sortMenuView.snp.makeConstraints {
+            $0.width.equalTo(sortButton)
+            $0.top.equalTo(sortButton.snp.bottom).offset(8)
+            $0.right.equalTo(sortButton)
+        }
+        
+        sortMenuView.snp.makeConstraints {
+            $0.height.equalTo(sortOptions.count * 25)
         }
     }
 }
