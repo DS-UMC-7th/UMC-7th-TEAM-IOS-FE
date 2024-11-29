@@ -61,6 +61,39 @@ class MyPageView: UIView {
     }
     
     // 프로필
+    private let profileImage = UIImageView().then {
+        $0.image = UIImage.imageProfile
+    }
+    
+    private let nameBackground = UIView().then {
+        $0.backgroundColor = UIColor(red: 33/255, green: 56/255, blue: 86/255, alpha: 1)
+        $0.layer.cornerRadius = 10
+    }
+    
+    private let nameLabel = UILabel().then {
+        let partLabel = UILabel()
+        partLabel.text = "책책책참새 님"
+        
+        let attributedString = NSMutableAttributedString(string: partLabel.text ?? "")
+        attributedString.addAttribute(.font, value: UIFont(name: "Pretendard-Bold", size: 17) ?? .systemFont(ofSize: 17), range: (partLabel.text! as NSString).range(of: "책책책참새"))
+        attributedString.addAttribute(.font, value: UIFont(name: "Pretendard-Bold", size: 15) ?? .systemFont(ofSize: 15), range: (partLabel.text! as NSString).range(of: " 님"))
+        
+        $0.attributedText = attributedString
+        $0.textColor = .white
+    }
+
+    
+    private let emailLabel = UILabel().then {
+        $0.text = "ks18mskd9@naver.com"
+        $0.font = UIFont(name: "Pretendard-Medium", size: 15)
+        $0.textColor = .black
+    }
+    
+    private let infoStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.spacing = 4
+        $0.alignment = .leading
+    }
     
     // 메뉴
     
@@ -87,6 +120,7 @@ class MyPageView: UIView {
     private func makeStackView() {
         [logoImage, logoTitle].forEach { logoStackView.addArrangedSubview($0) }
         [alertButton, menuButton].forEach { menuStackView.addArrangedSubview($0) }
+        [nameBackground, emailLabel].forEach { infoStackView.addArrangedSubview($0) }
     }
     
     private func setView() {
@@ -94,6 +128,9 @@ class MyPageView: UIView {
             infoBackgroundView,
             logoStackView,
             menuStackView,
+            profileImage,
+            infoStackView,
+            nameLabel
         ].forEach {
             addSubview($0)
         }
@@ -112,6 +149,30 @@ class MyPageView: UIView {
         menuStackView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(13)
             $0.right.equalToSuperview().offset(-16)
+        }
+        
+        profileImage.snp.makeConstraints {
+            $0.top.equalTo(logoStackView.snp.bottom).offset(20)
+            $0.left.equalToSuperview().offset(16)
+        }
+        
+        infoStackView.snp.makeConstraints {
+            $0.top.equalTo(profileImage.snp.top)
+            $0.left.equalTo(profileImage.snp.right).offset(12)
+        }
+        
+        nameBackground.snp.makeConstraints {
+            $0.width.equalTo(108)
+            $0.height.equalTo(32)
+        }
+        
+        nameLabel.snp.makeConstraints {
+            $0.top.equalTo(infoStackView.snp.top).offset(5)
+            $0.left.equalTo(infoStackView.snp.left).offset(9)
+        }
+        
+        emailLabel.snp.makeConstraints {
+            $0.height.equalTo(24)
         }
 
     }
