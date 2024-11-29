@@ -42,6 +42,11 @@ class BookDetailView: UIView {
         $0.text = "작별하지 않는다"
         $0.font = UIFont(name: "MaruBuriOTF-Bold", size: 17) ?? UIFont.systemFont(ofSize: 17)
         $0.textColor = .white
+        $0.textAlignment = .center
+    }
+    
+    //소라색 배경 뷰(책 제목 아래)
+    private let lightBlueBackgroundView = UIView().then {
         $0.backgroundColor = UIColor(red: 117/255, green: 148/255, blue: 193/255, alpha: 1)
     }
     
@@ -51,22 +56,25 @@ class BookDetailView: UIView {
         $0.font = UIFont(name: "Pretendard", size: 15) ?? UIFont.systemFont(ofSize: 15)
         $0.textColor = .white
         $0.numberOfLines = 0
+        $0.textAlignment = .center
      
     }
     
     //컴포넌트 추가
     private func setupSubviews() {
         self.addSubview(blueBackgroundView)
-        self.addSubview(profileImageView)
-        self.addSubview(bookTitleLabel)
-        self.addSubview(bookDescriptionLabel)
+        blueBackgroundView.addSubview(profileImageView)
+        blueBackgroundView.addSubview(lightBlueBackgroundView)
+        blueBackgroundView.addSubview(bookTitleLabel)
+        blueBackgroundView.addSubview(bookDescriptionLabel)
     }
-
+    
    //레이아웃 설정
     private func setupConstraints() {
         blueBackgroundView.snp.makeConstraints {
             $0.width.equalTo(360)
             $0.height.equalTo(380)
+            $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(49)
         }
@@ -83,13 +91,22 @@ class BookDetailView: UIView {
             $0.height.equalTo(24)
             $0.top.equalTo(profileImageView.snp.bottom).offset(16)
             $0.left.equalTo(blueBackgroundView).offset(120)
+            $0.centerX.equalTo(lightBlueBackgroundView)
+        }
+        
+        lightBlueBackgroundView.snp.makeConstraints {
+            $0.width.equalTo(132)
+            $0.height.equalTo(14.61)
+            $0.top.equalTo(bookTitleLabel.snp.bottom).offset(-13)
+            $0.centerX.equalTo(blueBackgroundView)
         }
         
         bookDescriptionLabel.snp.makeConstraints {
             $0.width.equalTo(320)
             $0.height.equalTo(90)
             $0.top.equalTo(bookTitleLabel.snp.bottom).offset(19)
-            $0.left.equalTo(blueBackgroundView).offset(20) 
+            $0.left.equalTo(blueBackgroundView).offset(20)
+            $0.centerX.equalTo(blueBackgroundView)
         }
     }
 }
