@@ -14,13 +14,32 @@ class BookDetailView: UIView {
         super.init(frame: frame)
         self.backgroundColor = .white
         setupSubviews()
+        setupGraphUI()
         setupConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
+    // 컴포넌트 추가
+    private func setupSubviews() {
+        self.addSubview(blueBackgroundView)
+        blueBackgroundView.addSubview(profileImageView)
+        blueBackgroundView.addSubview(lightBlueBackgroundView)
+        blueBackgroundView.addSubview(bookTitleLabel)
+        blueBackgroundView.addSubview(bookDescriptionLabel)
+        
+        self.addSubview(bookInfoBackgroundView)
+        bookInfoBackgroundView.addSubview(bookInfoTitleLabel)
+        bookInfoBackgroundView.addSubview(bookInfoContentLabel)
+        
+        self.addSubview(ratingContainerView)
+        ratingContainerView.addSubview(averageRatingLabel)
+        ratingContainerView.addSubview(totalReviewsLabel)
+        ratingContainerView.addSubview(ratingGraphStackView)
+    }
+    
     // 남색 배경 영역
     private let blueBackgroundView = UIView().then {
         $0.backgroundColor = UIColor(red: 33/255, green: 56/255, blue: 86/255, alpha: 1)
@@ -57,7 +76,7 @@ class BookDetailView: UIView {
         $0.textColor = .white
         $0.numberOfLines = 0
         $0.textAlignment = .center
-     
+        
     }
     
     // 책 정보 배경 뷰
@@ -86,20 +105,86 @@ class BookDetailView: UIView {
         $0.numberOfLines = 0
     }
     
-    // 컴포넌트 추가
-    private func setupSubviews() {
-        self.addSubview(blueBackgroundView)
-        blueBackgroundView.addSubview(profileImageView)
-        blueBackgroundView.addSubview(lightBlueBackgroundView)
-        blueBackgroundView.addSubview(bookTitleLabel)
-        blueBackgroundView.addSubview(bookDescriptionLabel)
-        
-        self.addSubview(bookInfoBackgroundView)
-        bookInfoBackgroundView.addSubview(bookInfoTitleLabel)
-        bookInfoBackgroundView.addSubview(bookInfoContentLabel)
+    
+    //별점 및 리뷰 수 그래프 컴포넌트
+    // 별점 및 리뷰 UI를 포함하는 큰 컨테이너
+    private let ratingContainerView = UIView().then {
+        $0.backgroundColor = .clear
     }
     
-   //레이아웃 설정
+    // 별점 레이블
+    private let averageRatingLabel = UILabel().then {
+        $0.font = UIFont.boldSystemFont(ofSize: 40)
+        $0.textColor = .black
+        $0.text = "0.0"
+    }
+    
+    // 리뷰 수 레이블
+    private let totalReviewsLabel = UILabel().then {
+        $0.font = UIFont.systemFont(ofSize: 16)
+        $0.textColor = .gray
+        $0.text = "0개의 리뷰"
+    }
+    
+    // 별점 그래프를 담을 스택뷰
+    private lazy var ratingGraphStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        return stackView
+    }()
+    
+    // 별점 그래프 UI 구성
+    private func setupGraphUI() {
+        for i in (1...5).reversed() {
+            let barContainer = UIView()
+            
+            // 별점 (5, 4, 3, ...)을 표시하는 레이블
+            let starLabel = UILabel().then {
+                $0.text = "\(i)"
+                $0.font = UIFont.systemFont(ofSize: 14)
+                $0.textColor = .black
+            }
+            
+            // 막대 바 그래프 뷰
+            let bar = UIView().then {
+                $0.backgroundColor = UIColor.systemBlue
+                $0.layer.cornerRadius = 4
+            }
+            
+            // 각 별점 비율을 텍스트로 표시하는 레이블
+            let percentageLabel = UILabel().then {
+                $0.text = "0%"
+                $0.font = UIFont.systemFont(ofSize: 12)
+                $0.textColor = .gray // 텍스트 색상: 회색
+            }
+            // 서브뷰 추가
+            barContainer.addSubview(starLabel)
+            barContainer.addSubview(bar)
+            barContainer.addSubview(percentageLabel)
+            
+            // 레이아웃
+            starLabel.snp.makeConstraints {
+                $0.leading.centerY.equalToSuperview()
+                $0.width.equalTo(30)
+            }
+            bar.snp.makeConstraints {
+                $0.height.equalTo(8)
+                $0.centerY.equalToSuperview()
+                $0.leading.equalTo(starLabel.snp.trailing).offset(8)
+                $0.width.equalTo(0) // 초기 너비는 0
+            }
+            percentageLabel.snp.makeConstraints {
+                $0.leading.equalTo(bar.snp.trailing).offset(8)
+                $0.trailing.centerY.equalToSuperview()
+                $0.width.equalTo(30)
+            }
+        
+            ratingGraphStackView.addArrangedSubview(barContainer)
+        }
+    }
+    
+    //레이아웃 설정
     private func setupConstraints() {
         //프로필 이미지 UI 구성
         blueBackgroundView.snp.makeConstraints {
@@ -125,7 +210,7 @@ class BookDetailView: UIView {
             $0.centerX.equalTo(lightBlueBackgroundView)
         }
         
-                lightBlueBackgroundView.snp.makeConstraints {
+        lightBlueBackgroundView.snp.makeConstraints {
             $0.width.equalTo(132)
             $0.height.equalTo(14.61)
             $0.top.equalTo(bookTitleLabel.snp.bottom).offset(-13)
@@ -161,6 +246,27 @@ class BookDetailView: UIView {
             $0.height.equalTo(88)
             $0.top.equalTo(bookInfoBackgroundView).offset(12)
             $0.left.equalTo(bookInfoTitleLabel.snp.right).offset(20)
+        }
+        
+        ratingContainerView.snp.makeConstraints {
+            $0.top.equalTo(bookInfoBackgroundView.snp.bottom).offset(20)
+            $0.left.right.equalToSuperview().inset(20)
+            $0.height.equalTo(200)
+        }
+        
+        averageRatingLabel.snp.makeConstraints {
+            $0.top.equalTo(ratingContainerView.snp.top).offset(16)
+            $0.left.equalTo(ratingContainerView).offset(16)
+        }
+        
+        totalReviewsLabel.snp.makeConstraints {
+            $0.top.equalTo(averageRatingLabel.snp.bottom).offset(8)
+            $0.left.equalTo(averageRatingLabel)
+        }
+        
+        ratingGraphStackView.snp.makeConstraints {
+            $0.top.equalTo(totalReviewsLabel.snp.bottom).offset(16)
+            $0.left.right.equalTo(ratingContainerView).inset(16)
         }
     }
 }
