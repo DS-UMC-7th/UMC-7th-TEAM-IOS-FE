@@ -193,7 +193,7 @@ class BookDetailView: UIView {
     
     
     // 정렬 버튼 뷰
-    private let sortButton = UIButton().then {
+    let sortButton = UIButton().then {
         $0.setTitle("별점 높은 순", for: .normal)
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
