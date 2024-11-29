@@ -12,13 +12,18 @@ import Then
 class BookDetailView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = UIColor(red: 33/255, green: 56/255, blue: 86/255, alpha: 1)
+        self.backgroundColor = .white
         setupSubviews()
         setupConstraints()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // 남색 배경 영역
+    private let blueBackgroundView = UIView().then {
+        $0.backgroundColor = UIColor(red: 33/255, green: 56/255, blue: 86/255, alpha: 1)
     }
     
     //책 표지 이미지
@@ -42,7 +47,7 @@ class BookDetailView: UIView {
     
     //책 소개 레이블
     private let bookDescriptionLabel = UILabel().then {
-        $0.text = "학살 이후 실종된 가족을 찾기 위한 생존자의 길고 고요한 투쟁의 서사가 있다. 공간적으로는 제주에서 경산에 이르고, 시간적으로는 반세기를 넘긴다. 폭력에 훼손되고 공포에 짓눌려도 인간은 포기하지 않는다. 작별할 수 없다는 것이다."
+        $0.text = " 학살 이후 실종된 가족을 찾기 위한 생존자의 길고 고요한 투쟁의 서사가 있다. 공간적으로는 제주에서 경산에 이르고, 시간적으로는 반세기를 넘긴다. 폭력에 훼손되고 공포에 짓눌려도 인간은 포기하지 않는다. 작별할 수 없다는 것이다."
         $0.font = UIFont(name: "Pretendard", size: 15) ?? UIFont.systemFont(ofSize: 15)
         $0.textColor = .white
         $0.numberOfLines = 0
@@ -51,6 +56,7 @@ class BookDetailView: UIView {
     
     //컴포넌트 추가
     private func setupSubviews() {
+        self.addSubview(blueBackgroundView)
         self.addSubview(profileImageView)
         self.addSubview(bookTitleLabel)
         self.addSubview(bookDescriptionLabel)
@@ -58,25 +64,32 @@ class BookDetailView: UIView {
 
    //레이아웃 설정
     private func setupConstraints() {
+        blueBackgroundView.snp.makeConstraints {
+            $0.width.equalTo(360)
+            $0.height.equalTo(380)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(self.safeAreaLayoutGuide.snp.top).offset(49)
+        }
+        
         profileImageView.snp.makeConstraints {
             $0.width.equalTo(84)
             $0.height.equalTo(124)
-            $0.top.equalToSuperview().offset(75)
-            $0.left.equalToSuperview().offset(138)
+            $0.top.equalTo(blueBackgroundView).offset(75)
+            $0.left.equalTo(blueBackgroundView).offset(138)
         }
         
         bookTitleLabel.snp.makeConstraints {
-            $0.width.equalTo(132)
-            $0.height.equalTo(14.61)
-            $0.top.equalToSuperview().offset(227)
-            $0.left.equalToSuperview().offset(114)
+            $0.width.equalTo(121)
+            $0.height.equalTo(24)
+            $0.top.equalTo(profileImageView.snp.bottom).offset(16)
+            $0.left.equalTo(blueBackgroundView).offset(120)
         }
         
         bookDescriptionLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(258)
-            $0.leading.equalToSuperview().offset(20)
             $0.width.equalTo(320)
             $0.height.equalTo(90)
+            $0.top.equalTo(bookTitleLabel.snp.bottom).offset(19)
+            $0.left.equalTo(blueBackgroundView).offset(20) 
         }
     }
 }
