@@ -96,6 +96,20 @@ class MyPageView: UIView {
     }
     
     // 메뉴
+    private let menuBackground = UIView().then {
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 12
+    }
+    
+    public let menuCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
+        $0.scrollDirection = .horizontal
+        $0.estimatedItemSize = .init(width: 115, height: 40)
+        $0.minimumLineSpacing = 2
+    }).then {
+        $0.backgroundColor = UIColor(red: 227/255, green: 241/255, blue: 255/255, alpha: 1)
+        $0.isScrollEnabled = false
+        $0.register(MyPageMenuCollectionViewCell.self, forCellWithReuseIdentifier: MyPageMenuCollectionViewCell.identifier)
+    }
     
     
     // MARK: - 내가 쓴 리뷰
@@ -130,7 +144,9 @@ class MyPageView: UIView {
             menuStackView,
             profileImage,
             infoStackView,
-            nameLabel
+            nameLabel,
+            menuBackground,
+            menuCollectionView
         ].forEach {
             addSubview($0)
         }
@@ -138,7 +154,7 @@ class MyPageView: UIView {
         infoBackgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(268)
+            $0.bottom.equalTo(menuBackground.snp.bottom).offset(20)
         }
         
         logoStackView.snp.makeConstraints {
@@ -174,6 +190,21 @@ class MyPageView: UIView {
         emailLabel.snp.makeConstraints {
             $0.height.equalTo(24)
         }
+        
+        menuBackground.snp.makeConstraints {
+            $0.top.equalTo(infoStackView.snp.bottom).offset(20)
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(68)
+        }
+        
+        menuCollectionView.snp.makeConstraints {
+            $0.top.equalTo(menuBackground.snp.top).offset(14)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(349)
+            $0.height.equalTo(40)
+        }
 
     }
+
+
 }
