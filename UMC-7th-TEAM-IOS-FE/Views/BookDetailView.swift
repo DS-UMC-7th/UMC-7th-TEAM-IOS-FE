@@ -10,7 +10,6 @@ import SnapKit
 import Then
 
 class BookDetailView: UIView {
-    
     var onSortOptionSelected: ((String) -> Void)?
     
     override init(frame: CGRect) {
