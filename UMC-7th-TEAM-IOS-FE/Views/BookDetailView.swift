@@ -10,12 +10,15 @@ import SnapKit
 import Then
 
 class BookDetailView: UIView {
+    
+    var onSortOptionSelected: ((String) -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.backgroundColor = .white
         setupSubviews()
         setupGraphUI()
-        setupSortButton()//정렬 버튼 UI
+        setupSortButton()
         setupConstraints()
     }
     
@@ -40,6 +43,8 @@ class BookDetailView: UIView {
         ratingContainerView.addSubview(totalReviewsLabel)
         ratingContainerView.addSubview(ratingGraphStackView)
         
+        self.addSubview(sortButton)
+        self.addSubview(sortMenuView)
     }
     
     // 남색 배경 영역
@@ -234,6 +239,22 @@ class BookDetailView: UIView {
             }
         }
     
+    // 정렬 메뉴 버튼이 눌렸을 때 호출
+    @objc private func sortOptionTapped(_ sender: UIButton) {
+        guard let option = sender.title(for: .normal) else { return }
+        onSortOptionSelected?(option)
+        toggleSortMenu(isVisible: false)
+    }
+    
+    // 정렬 메뉴 보이기/숨기기
+    func toggleSortMenu(isVisible: Bool) {
+        UIView.animate(withDuration: 0.3) {
+            self.sortMenuView.isHidden = !isVisible
+            self.sortMenuView.alpha = isVisible ? 1.0 : 0.0
+        }
+    }
+    
+    
     //레이아웃 설정
     private func setupConstraints() {
         //프로필 이미지 UI 구성
@@ -341,9 +362,6 @@ class BookDetailView: UIView {
             $0.width.equalTo(sortButton)
             $0.top.equalTo(sortButton.snp.bottom).offset(8)
             $0.right.equalTo(sortButton)
-        }
-        
-        sortMenuView.snp.makeConstraints {
             $0.height.equalTo(sortOptions.count * 25)
         }
     }
