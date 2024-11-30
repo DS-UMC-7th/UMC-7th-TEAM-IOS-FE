@@ -2,7 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key></key>
+	<key>UIAppFonts</key>
+	<array>
+		<string>SF함박눈TTF.ttf</string>
+		<string>Pretendard-Thin.ttf</string>
+		<string>Pretendard-SemiBold.ttf</string>
+		<string>Pretendard-Regular.ttf</string>
+		<string>Pretendard-Medium.ttf</string>
+		<string>Pretendard-Light.ttf</string>
+		<string>Pretendard-ExtraLight.ttf</string>
+		<string>Pretendard-ExtraBold.ttf</string>
+		<string>Pretendard-Bold.ttf</string>
+		<string>Pretendard-Black.ttf</string>
+		<string>MaruBuri-Bold.ttf</string>
+		<string>MaruBuri-ExtraLight.ttf</string>
+		<string>MaruBuri-Light.ttf</string>
+		<string>MaruBuri-Regular.ttf</string>
+		<string>MaruBuri-SemiBold.ttf</string>
+	</array>
+	<key>CFBundleName</key>
 	<string>Main</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
@@ -13,8 +31,6 @@
 			<key>UIWindowSceneSessionRoleApplication</key>
 			<array>
 				<dict>
-					<key></key>
-					<string>Main</string>
 					<key>UISceneConfigurationName</key>
 					<string>Default Configuration</string>
 					<key>UISceneDelegateClassName</key>
