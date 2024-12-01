@@ -137,6 +137,13 @@ class MyPageView: UIView {
     }
     
     // 테이블뷰
+    public let reviewTableView = UITableView().then {
+        $0.register(MyPageReviewTableViewCell.self, forCellReuseIdentifier: MyPageReviewTableViewCell.identifier)
+        $0.separatorStyle = .singleLine
+        $0.separatorColor = UIColor(red: 227/255, green: 241/255, blue: 255/255, alpha: 1)
+        $0.separatorInset.left = 0
+        $0.showsVerticalScrollIndicator = false
+    }
     
     // 더보기
     
@@ -167,7 +174,8 @@ class MyPageView: UIView {
             menuBackground,
             menuCollectionView,
             reviewLabelBackground, reviewLabel,
-            filterButton
+            filterButton,
+            reviewTableView
         ].forEach {
             addSubview($0)
         }
@@ -242,6 +250,12 @@ class MyPageView: UIView {
             $0.top.equalTo(reviewLabelBackground.snp.bottom).offset(16)
             $0.right.equalToSuperview().offset(-16)
             $0.height.equalTo(20)
+        }
+        
+        reviewTableView.snp.makeConstraints {
+            $0.top.equalTo(filterButton.snp.bottom)
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.height.equalTo(444)
         }
 
     }

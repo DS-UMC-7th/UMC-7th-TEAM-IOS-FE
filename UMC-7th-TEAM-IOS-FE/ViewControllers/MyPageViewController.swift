@@ -21,6 +21,8 @@ class MyPageViewController: UIViewController {
     // MARK: - function
     private func setDataSource() {
         myPageView.menuCollectionView.dataSource = self
+        myPageView.reviewTableView.dataSource = self
+        myPageView.reviewTableView.delegate = self
     }
     
     private func setAction() {
@@ -64,5 +66,31 @@ extension MyPageViewController: UICollectionViewDataSource {
         return cell
     }
     
+    
+}
+
+extension MyPageViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        MyPageReviewModel.dummy().count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MyPageReviewTableViewCell.identifier, for: indexPath) as? MyPageReviewTableViewCell else {
+            return UITableViewCell()
+        }
+        
+        let list = MyPageReviewModel.dummy()[indexPath.row]
+        cell.bookImage.image = list.bookImage
+        cell.bookTitle.text = list.bookTitle
+        cell.bookInfo.text = list.bookInfo
+        cell.starLabel.text = list.starLabel
+        cell.reviewDateLabel.text = list.dateLabel
+        cell.reviewLabel.text = list.reviewLabel
+        return cell
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        148
+    }
     
 }
