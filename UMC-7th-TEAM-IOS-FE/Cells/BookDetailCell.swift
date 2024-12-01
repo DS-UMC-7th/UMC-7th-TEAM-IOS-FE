@@ -50,13 +50,33 @@ class BookDetailCell: UICollectionViewCell {
         $0.numberOfLines = 0
         $0.lineBreakMode = .byCharWrapping
     }
-    // MARK: - 책 정보
+    // MARK: - 책 정보 박스
+    private let bookInfoBackgroundView = UIView().then {
+        $0.backgroundColor = UIColor(red: 242/255, green: 249/255, blue: 255/255, alpha: 1)
+        $0.layer.cornerRadius = 12
+    }
+    
+    private let bookInfoTitleLabel = UILabel().then {
+        $0.text = "작가\n출판사\n발행 일자\n쪽수"
+        $0.font = UIFont(name: "Pretendard", size: 15)
+        $0.textColor = UIColor(red: 117/255, green: 148/255, blue: 193/255, alpha: 1)
+        $0.numberOfLines = 0
+        $0.textAlignment = .left
+    }
+    
+    private let bookInfoContentLabel = UILabel().then {
+        $0.font = UIFont(name: "Pretendard", size: 15)
+        $0.textColor = .black
+        $0.numberOfLines = 0
+        $0.textAlignment = .left
+        $0.lineBreakMode = .byCharWrapping
+    }
     // MARK: - 별점 및 리뷰 수 그래프
     // MARK: - 정렬 및 필터 버튼 
     
     // MARK: - function
     private func setupView() {
-        [topBackgroundView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel, ].forEach { contentView.addSubview($0) }
+        [topBackgroundView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel,bookInfoBackgroundView,bookInfoTitleLabel,bookInfoContentLabel ].forEach { contentView.addSubview($0) }
         
         topBackgroundView.snp.makeConstraints {
             $0.width.equalTo(360)
@@ -94,11 +114,33 @@ class BookDetailCell: UICollectionViewCell {
             $0.top.equalTo(titleLabel.snp.bottom).offset(19)
             $0.centerX.equalTo(topBackgroundView)
         }
+        bookInfoBackgroundView.snp.makeConstraints {
+            $0.width.equalTo(320)
+            $0.height.equalTo(112)
+            $0.top.equalTo(descriptionLabel.snp.bottom).offset(20)
+            $0.left.equalToSuperview().offset(20)
+            $0.centerX.equalToSuperview()
+        }
+        
+        bookInfoTitleLabel.snp.makeConstraints {
+            $0.width.equalTo(56)
+            $0.height.equalTo(88)
+            $0.top.equalTo(bookInfoBackgroundView).offset(12)
+            $0.left.equalTo(bookInfoBackgroundView).offset(12)
+        }
+        
+        bookInfoContentLabel.snp.makeConstraints {
+            $0.width.equalTo(130)
+            $0.height.equalTo(88)
+            $0.top.equalTo(bookInfoBackgroundView).offset(12)
+            $0.left.equalTo(bookInfoTitleLabel.snp.right).offset(20)
+        }
     }
 
     func configure(with model: BookDetailModel) {
         titleLabel.text = model.title
         descriptionLabel.text = model.description
         coverImageView.image = model.coverImage
+        bookInfoContentLabel.text = "\(model.author)\n\(model.publisher)\n\(model.publishDate)\n\(model.pages)쪽"
     }
 }
