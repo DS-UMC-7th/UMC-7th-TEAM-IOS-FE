@@ -12,6 +12,15 @@ import Then
 class BookDetailCell: UICollectionViewCell {
     static let identifier = "BookDetailCell"
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - 책 프로필 이미지
     let topBackgroundView = UIView().then {
         $0.backgroundColor = UIColor(red: 33/255, green: 56/255, blue: 86/255, alpha: 1)
     }
@@ -41,16 +50,11 @@ class BookDetailCell: UICollectionViewCell {
         $0.numberOfLines = 0
         $0.lineBreakMode = .byCharWrapping
     }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupView()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+    // MARK: - 책 정보
+    // MARK: - 별점 및 리뷰 수 그래프
+    // MARK: - 정렬 및 필터 버튼 
+    
+    // MARK: - function
     private func setupView() {
         [topBackgroundView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel, ].forEach { contentView.addSubview($0) }
         
@@ -59,9 +63,6 @@ class BookDetailCell: UICollectionViewCell {
             $0.height.equalTo(380)
             $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
-            
-
-
         }
         
         coverImageView.snp.makeConstraints {

@@ -7,7 +7,6 @@
 
 import UIKit
 
-// 책 기본 정보 모델
 struct BookDetailModel {
     let title: String
     let description: String
