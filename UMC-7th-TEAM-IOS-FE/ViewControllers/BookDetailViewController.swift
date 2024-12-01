@@ -8,21 +8,28 @@
 import UIKit
 
 class BookDetailViewController: UIViewController {
-    
     private let bookDetailView = BookDetailView()
-    
-    private var isSortMenuVisible = false
-    
+    private let data = BookDetailModel.dummy()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view = bookDetailView
-        setupActions()
+        view = bookDetailView
+
+        bookDetailView.collectionView.dataSource = self
     }
-    private func setupActions() {
-        bookDetailView.sortButton.addTarget(self, action: #selector(sortButtonTapped), for: .touchUpInside)
+}
+
+extension BookDetailViewController: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 1
     }
-    @objc private func sortButtonTapped() {
-        isSortMenuVisible.toggle()
-        bookDetailView.toggleSortMenu(isVisible: isSortMenuVisible)
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookDetailCell.identifier, for: indexPath) as? BookDetailCell else {
+            return UICollectionViewCell()
+        }
+
+        cell.configure(with: data)
+        return cell
     }
 }
