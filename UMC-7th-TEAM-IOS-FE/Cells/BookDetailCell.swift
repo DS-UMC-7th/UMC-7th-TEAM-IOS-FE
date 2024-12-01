@@ -89,13 +89,13 @@ class BookDetailCell: UICollectionViewCell {
     }
     
     private let totalReviewsLabel = UILabel().then {
-        $0.textAlignment = .center
+        $0.textAlignment = .left
     }
     
     private lazy var ratingGraphStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
-        stackView.spacing = 8
+        stackView.spacing = 16
         return stackView
     }()
     
@@ -164,10 +164,11 @@ class BookDetailCell: UICollectionViewCell {
         }
         
         ratingContainerView.snp.makeConstraints {
-            $0.top.equalTo(bookInfoBackgroundView.snp.bottom).offset(20)
-            $0.centerX.equalToSuperview()
             $0.width.equalTo(320)
             $0.height.equalTo(112)
+            $0.top.equalTo(bookInfoBackgroundView.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+
         }
         
         averageRatingLabel.snp.makeConstraints {
@@ -183,14 +184,11 @@ class BookDetailCell: UICollectionViewCell {
         totalReviewsLabel.snp.makeConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(8)
             $0.left.equalTo(averageRatingLabel)
-            
-            
-            
         }
         
         ratingGraphStackView.snp.makeConstraints {
-            $0.top.equalTo(starStackView.snp.bottom).offset(8)
-            $0.right.equalTo(ratingContainerView)
+            $0.centerY.equalTo(ratingContainerView)
+            $0.right.equalTo(ratingContainerView).offset(-160)
         }
     }
 
@@ -202,6 +200,7 @@ class BookDetailCell: UICollectionViewCell {
         averageRatingLabel.text = String(format: "%.1f", model.rating)
         configureStarIcons(for: model.rating)
         setTotalReviewsLabel(totalReviews: model.totalReviews)
+        configureRatingGraph(with: model.ratingDistribution.reversed())
         
     }
     
@@ -236,8 +235,57 @@ class BookDetailCell: UICollectionViewCell {
 
         for _ in (filledStars)..<5 {
             let emptyStar = UIImageView(image: UIImage(systemName: "star"))
-            emptyStar.tintColor = .white
+            emptyStar.tintColor = UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1)
+            emptyStar.backgroundColor = .clear
             starStackView.addArrangedSubview(emptyStar)
+        }
+    }
+    
+    private func configureRatingGraph(with distribution: [Int]) {
+        ratingGraphStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        for (index, percentage) in distribution.enumerated().reversed() {
+            let starLabel = UILabel()
+            starLabel.text = "\(index + 1)"
+            starLabel.font = .systemFont(ofSize: 12)
+            starLabel.textColor = .black
+            
+            let barView = UIView()
+            barView.backgroundColor = UIColor(red: 117/255, green: 148/255, blue: 193/255, alpha: 1)
+            barView.layer.cornerRadius = 4
+            
+            let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
+            starImageView.tintColor = UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1)
+            starImageView.contentMode = .scaleAspectFit
+            starImageView.snp.makeConstraints {
+                $0.width.height.equalTo(12)
+            }
+            
+            let percentageLabel = UILabel()
+            percentageLabel.text = "\(percentage)%"
+            percentageLabel.font = .systemFont(ofSize: 12)
+            percentageLabel.textColor = .black
+            
+            let container = UIView()
+            [starImageView, starLabel, barView, percentageLabel].forEach { container.addSubview($0) }
+            
+            starImageView.snp.makeConstraints {
+                 $0.left.centerY.equalToSuperview()
+             }
+            starLabel.snp.makeConstraints {
+                $0.left.equalTo(starImageView.snp.right).offset(4)
+                $0.left.centerY.equalToSuperview()
+            }
+            barView.snp.makeConstraints {
+                $0.left.equalTo(starLabel.snp.right).offset(4)
+                $0.centerY.equalToSuperview()
+                $0.width.equalTo(percentage * 2)
+                $0.height.equalTo(8)
+            }
+            percentageLabel.snp.makeConstraints {
+                $0.left.equalTo(barView.snp.right).offset(8)
+                $0.centerY.equalToSuperview()
+            }
+            ratingGraphStackView.addArrangedSubview(container)
         }
     }
 }
