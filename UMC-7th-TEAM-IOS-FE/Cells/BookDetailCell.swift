@@ -72,11 +72,38 @@ class BookDetailCell: UICollectionViewCell {
         $0.lineBreakMode = .byCharWrapping
     }
     // MARK: - 별점 및 리뷰 수 그래프
-    // MARK: - 정렬 및 필터 버튼 
+    private let ratingContainerView = UIView().then {
+        $0.backgroundColor = .clear
+    }
+    
+    private let averageRatingLabel = UILabel().then {
+        $0.font = UIFont.boldSystemFont(ofSize: 40)
+        $0.textColor = UIColor(red: 117/255, green: 148/255, blue: 193/255, alpha: 1)
+        $0.textAlignment = .center
+    }
+    
+    private let starStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .center
+        $0.spacing = 4
+    }
+    
+    private let totalReviewsLabel = UILabel().then {
+        $0.textAlignment = .center
+    }
+    
+    private lazy var ratingGraphStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 8
+        return stackView
+    }()
+    
+    // MARK: - 정렬 및 필터 버튼
     
     // MARK: - function
     private func setupView() {
-        [topBackgroundView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel,bookInfoBackgroundView,bookInfoTitleLabel,bookInfoContentLabel ].forEach { contentView.addSubview($0) }
+        [topBackgroundView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel,bookInfoBackgroundView,bookInfoTitleLabel,bookInfoContentLabel, ratingContainerView, averageRatingLabel,starStackView, totalReviewsLabel, ratingGraphStackView].forEach { contentView.addSubview($0) }
         
         topBackgroundView.snp.makeConstraints {
             $0.width.equalTo(360)
@@ -135,6 +162,36 @@ class BookDetailCell: UICollectionViewCell {
             $0.top.equalTo(bookInfoBackgroundView).offset(12)
             $0.left.equalTo(bookInfoTitleLabel.snp.right).offset(20)
         }
+        
+        ratingContainerView.snp.makeConstraints {
+            $0.top.equalTo(bookInfoBackgroundView.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(320)
+            $0.height.equalTo(112)
+        }
+        
+        averageRatingLabel.snp.makeConstraints {
+            $0.top.left.equalTo(ratingContainerView).offset(12)
+        }
+        
+        starStackView.snp.makeConstraints {
+            //$0.centerY.equalTo(averageRatingLabel)
+            $0.top.equalTo(averageRatingLabel.snp.bottom).offset(8)
+            $0.left.equalTo(averageRatingLabel)
+        }
+        
+        totalReviewsLabel.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(8)
+            $0.left.equalTo(averageRatingLabel)
+            
+            
+            
+        }
+        
+        ratingGraphStackView.snp.makeConstraints {
+            $0.top.equalTo(starStackView.snp.bottom).offset(8)
+            $0.right.equalTo(ratingContainerView)
+        }
     }
 
     func configure(with model: BookDetailModel) {
@@ -142,5 +199,45 @@ class BookDetailCell: UICollectionViewCell {
         descriptionLabel.text = model.description
         coverImageView.image = model.coverImage
         bookInfoContentLabel.text = "\(model.author)\n\(model.publisher)\n\(model.publishDate)\n\(model.pages)쪽"
+        averageRatingLabel.text = String(format: "%.1f", model.rating)
+        configureStarIcons(for: model.rating)
+        setTotalReviewsLabel(totalReviews: model.totalReviews)
+        
+    }
+    
+    private func setTotalReviewsLabel(totalReviews: Int) {
+        let totalReviewsText = "\(totalReviews) 개의 리뷰"
+        let attributedString = NSMutableAttributedString(string: totalReviewsText)
+        
+        attributedString.addAttribute(
+            .foregroundColor,
+            value: UIColor(red: 117/255, green: 148/255, blue: 193/255, alpha: 1),
+            range: (totalReviewsText as NSString).range(of: "\(totalReviews)")
+        )
+        attributedString.addAttribute(
+            .foregroundColor,
+            value: UIColor.black,
+            range: (totalReviewsText as NSString).range(of: " 개의 리뷰")
+        )
+        totalReviewsLabel.attributedText = attributedString
+    }
+    
+    private func configureStarIcons(for rating: Double) {
+        starStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+
+        let filledStars = Int(rating)
+        let emptyStars = 5 - filledStars
+        
+        for _ in 0..<filledStars {
+            let star = UIImageView(image: UIImage(systemName: "star.fill"))
+            star.tintColor = UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1) // 황금색
+            starStackView.addArrangedSubview(star)
+        }
+
+        for _ in (filledStars)..<5 {
+            let emptyStar = UIImageView(image: UIImage(systemName: "star"))
+            emptyStar.tintColor = .white
+            starStackView.addArrangedSubview(emptyStar)
+        }
     }
 }
