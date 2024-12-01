@@ -6,10 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
-
-		231FCC102CFA348B000483A0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 231FCC0F2CFA348B000483A0 /* SnapKit */; };
-		231FCC132CFA3495000483A0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 231FCC122CFA3495000483A0 /* Then */; };
-
+/* Begin PBXBuildFile section */
+		2B9DC6312CFA19EF003AD4D1 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2B9DC6302CFA19EF003AD4D1 /* SnapKit */; };
+		2B9DC6342CFA19F7003AD4D1 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 2B9DC6332CFA19F7003AD4D1 /* Then */; };
+/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		18CB3B592CF8120600F9B499 /* UMC-7th-TEAM-IOS-FE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "UMC-7th-TEAM-IOS-FE.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -41,13 +41,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-<<<<<<< HEAD
 				2B9DC6312CFA19EF003AD4D1 /* SnapKit in Frameworks */,
 				2B9DC6342CFA19F7003AD4D1 /* Then in Frameworks */,
-=======
-				231FCC102CFA348B000483A0 /* SnapKit in Frameworks */,
-				231FCC132CFA3495000483A0 /* Then in Frameworks */,
->>>>>>> main
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,13 +85,8 @@
 			);
 			name = "UMC-7th-TEAM-IOS-FE";
 			packageProductDependencies = (
-<<<<<<< HEAD
 				2B9DC6302CFA19EF003AD4D1 /* SnapKit */,
 				2B9DC6332CFA19F7003AD4D1 /* Then */,
-=======
-				231FCC0F2CFA348B000483A0 /* SnapKit */,
-				231FCC122CFA3495000483A0 /* Then */,
->>>>>>> main
 			);
 			productName = "UMC-7th-TEAM-IOS-FE";
 			productReference = 18CB3B592CF8120600F9B499 /* UMC-7th-TEAM-IOS-FE.app */;
@@ -127,13 +117,8 @@
 			mainGroup = 18CB3B502CF8120600F9B499;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-<<<<<<< HEAD
 				2B9DC62F2CFA19EF003AD4D1 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				2B9DC6322CFA19F7003AD4D1 /* XCRemoteSwiftPackageReference "Then" */,
-=======
-				231FCC0E2CFA348B000483A0 /* XCRemoteSwiftPackageReference "SnapKit" */,
-				231FCC112CFA3495000483A0 /* XCRemoteSwiftPackageReference "Then" */,
->>>>>>> main
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 18CB3B5A2CF8120600F9B499 /* Products */;
@@ -361,11 +346,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-<<<<<<< HEAD
 		2B9DC62F2CFA19EF003AD4D1 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
-=======
-		231FCC0E2CFA348B000483A0 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
->>>>>>> main
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit";
 			requirement = {
@@ -373,11 +354,7 @@
 				minimumVersion = 5.7.1;
 			};
 		};
-<<<<<<< HEAD
 		2B9DC6322CFA19F7003AD4D1 /* XCRemoteSwiftPackageReference "Then" */ = {
-=======
-		231FCC112CFA3495000483A0 /* XCRemoteSwiftPackageReference "Then" */ = {
->>>>>>> main
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/devxoul/Then";
 			requirement = {
@@ -388,7 +365,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-<<<<<<< HEAD
 		2B9DC6302CFA19EF003AD4D1 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2B9DC62F2CFA19EF003AD4D1 /* XCRemoteSwiftPackageReference "SnapKit" */;
@@ -397,16 +373,6 @@
 		2B9DC6332CFA19F7003AD4D1 /* Then */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 2B9DC6322CFA19F7003AD4D1 /* XCRemoteSwiftPackageReference "Then" */;
-=======
-		231FCC0F2CFA348B000483A0 /* SnapKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 231FCC0E2CFA348B000483A0 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = SnapKit;
-		};
-		231FCC122CFA3495000483A0 /* Then */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 231FCC112CFA3495000483A0 /* XCRemoteSwiftPackageReference "Then" */;
->>>>>>> main
 			productName = Then;
 		};
 /* End XCSwiftPackageProductDependency section */
