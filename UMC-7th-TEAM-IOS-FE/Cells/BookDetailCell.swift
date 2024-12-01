@@ -12,11 +12,14 @@ import Then
 class BookDetailCell: UICollectionViewCell {
     static let identifier = "BookDetailCell"
     
+    var onSortButtonTapped: (() -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+        setupSortMenu()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -33,7 +36,7 @@ class BookDetailCell: UICollectionViewCell {
         $0.layer.shadowOffset = CGSize(width: 3, height: 4)
         $0.layer.shadowRadius = 4
     }
-
+    
     private let titleLabel = UILabel().then {
         $0.font = UIFont(name: "MaruBuriOTF-Bold", size: 17)
         $0.textColor = .white
@@ -43,7 +46,7 @@ class BookDetailCell: UICollectionViewCell {
     private let subtitleBackgroundView = UIView().then {
         $0.backgroundColor = UIColor(red: 117/255, green: 148/255, blue: 193/255, alpha: 1)
     }
-
+    
     private let descriptionLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard", size: 15)
         $0.textColor = .white
@@ -100,9 +103,30 @@ class BookDetailCell: UICollectionViewCell {
     }()
     
     // MARK: - 정렬 및 필터 버튼
+    private let sortButton = UIButton().then {
+        $0.setTitle("별점 높은 순", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+        $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+        $0.backgroundColor = UIColor.white
+        $0.layer.borderColor = UIColor.lightGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 4
+        $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        $0.semanticContentAttribute = .forceRightToLeft
+    }
     
+    private let sortMenuView = UIView().then {
+        $0.backgroundColor = UIColor.white
+        $0.layer.borderColor = UIColor.lightGray.cgColor
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 4
+        $0.isHidden = true
+    }
+    
+    private let sortOptions = ["별점 높은 순", "최신순", "공감 많은 순"]
+    private var sortOptionButtons: [UIButton] = []
     // MARK: - function
-    private func setupView() {
+    func setupView() {
         [topBackgroundView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel,bookInfoBackgroundView,bookInfoTitleLabel,bookInfoContentLabel, ratingContainerView, averageRatingLabel,starStackView, totalReviewsLabel, ratingGraphStackView].forEach { contentView.addSubview($0) }
         
         topBackgroundView.snp.makeConstraints {
@@ -168,7 +192,7 @@ class BookDetailCell: UICollectionViewCell {
             $0.height.equalTo(112)
             $0.top.equalTo(bookInfoBackgroundView.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
-
+            
         }
         
         averageRatingLabel.snp.makeConstraints {
@@ -191,7 +215,7 @@ class BookDetailCell: UICollectionViewCell {
             $0.right.equalTo(ratingContainerView).offset(-160)
         }
     }
-
+    
     func configure(with model: BookDetailModel) {
         titleLabel.text = model.title
         descriptionLabel.text = model.description
@@ -204,7 +228,7 @@ class BookDetailCell: UICollectionViewCell {
         
     }
     
-    private func setTotalReviewsLabel(totalReviews: Int) {
+    func setTotalReviewsLabel(totalReviews: Int) {
         let totalReviewsText = "\(totalReviews) 개의 리뷰"
         let attributedString = NSMutableAttributedString(string: totalReviewsText)
         
@@ -221,9 +245,9 @@ class BookDetailCell: UICollectionViewCell {
         totalReviewsLabel.attributedText = attributedString
     }
     
-    private func configureStarIcons(for rating: Double) {
+    func configureStarIcons(for rating: Double) {
         starStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-
+        
         let filledStars = Int(rating)
         let emptyStars = 5 - filledStars
         
@@ -232,7 +256,7 @@ class BookDetailCell: UICollectionViewCell {
             star.tintColor = UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1) // 황금색
             starStackView.addArrangedSubview(star)
         }
-
+        
         for _ in (filledStars)..<5 {
             let emptyStar = UIImageView(image: UIImage(systemName: "star"))
             emptyStar.tintColor = UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1)
@@ -241,7 +265,7 @@ class BookDetailCell: UICollectionViewCell {
         }
     }
     
-    private func configureRatingGraph(with distribution: [Int]) {
+    func configureRatingGraph(with distribution: [Int]) {
         ratingGraphStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for (index, percentage) in distribution.enumerated().reversed() {
             let starLabel = UILabel()
@@ -269,8 +293,8 @@ class BookDetailCell: UICollectionViewCell {
             [starImageView, starLabel, barView, percentageLabel].forEach { container.addSubview($0) }
             
             starImageView.snp.makeConstraints {
-                 $0.left.centerY.equalToSuperview()
-             }
+                $0.left.centerY.equalToSuperview()
+            }
             starLabel.snp.makeConstraints {
                 $0.left.equalTo(starImageView.snp.right).offset(4)
                 $0.left.centerY.equalToSuperview()
@@ -287,5 +311,63 @@ class BookDetailCell: UICollectionViewCell {
             }
             ratingGraphStackView.addArrangedSubview(container)
         }
+    }
+    private func setupSortMenu() {
+        contentView.addSubview(sortButton)
+        contentView.addSubview(sortMenuView)
+        
+        sortButton.snp.makeConstraints {
+            $0.width.equalTo(96)
+            $0.height.equalTo(20)
+            $0.top.equalTo(ratingContainerView.snp.bottom).offset(20)
+            $0.right.equalToSuperview().offset(-20)
+        }
+        
+        sortOptions.forEach { option in
+            let button = UIButton().then {
+                $0.setTitle(option, for: .normal)
+                $0.setTitleColor(.black, for: .normal)
+                $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
+                $0.contentHorizontalAlignment = .left
+                $0.backgroundColor = .white
+                $0.addTarget(self, action: #selector(handleSortOptionTapped(_:)), for: .touchUpInside)
+            }
+            sortMenuView.addSubview(button)
+            sortOptionButtons.append(button)
+        }
+        
+        for (index, button) in sortOptionButtons.enumerated() {
+            button.snp.makeConstraints {
+                $0.left.right.equalToSuperview().inset(8)
+                $0.height.equalTo(20)
+                $0.top.equalToSuperview().offset(index * 25)
+            }
+        }
+        
+        sortMenuView.snp.makeConstraints {
+            $0.width.equalTo(sortButton)
+            $0.top.equalTo(sortButton.snp.bottom).offset(8)
+            $0.right.equalTo(sortButton)
+            $0.height.equalTo(sortOptions.count * 25)
+        }
+    }
+    
+    // MARK: - Sort Menu Actions
+    
+    @objc private func toggleSortMenu() {
+        UIView.animate(withDuration: 0.3, animations: {
+            self.sortMenuView.isHidden = !self.sortMenuView.isHidden
+            let newHeight = self.sortMenuView.isHidden ? 0 : self.sortOptions.count * 40
+            self.sortMenuView.snp.updateConstraints {
+                $0.height.equalTo(newHeight)
+            }
+            self.layoutIfNeeded()
+        })
+    }
+    
+    @objc private func handleSortOptionTapped(_ sender: UIButton) {
+        guard let title = sender.title(for: .normal) else { return }
+        sortButton.setTitle(title, for: .normal)
+        toggleSortMenu()
     }
 }
