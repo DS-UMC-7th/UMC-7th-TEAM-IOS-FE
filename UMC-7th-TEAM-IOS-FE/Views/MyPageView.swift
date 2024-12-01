@@ -114,8 +114,27 @@ class MyPageView: UIView {
     
     // MARK: - 내가 쓴 리뷰
     // 타이틀
+    private let reviewLabelBackground = UIView().then {
+        $0.backgroundColor = UIColor(red: 194/255, green: 221/255, blue: 248/255, alpha: 1)
+    }
+    
+    private let reviewLabel = UILabel().then {
+        $0.text = "내가 쓴 리뷰"
+        $0.font = UIFont(name: "MaruBuri-Bold", size: 20)
+        $0.textColor = .black
+    }
     
     // 필터링
+    public let filterButton = UIButton().then {
+        $0.setTitle("별점 높은 순", for: .normal)
+        $0.setTitleColor(.black, for: .normal)
+        $0.titleLabel?.font = UIFont(name: "Pretendard-Medium", size: 15)
+        $0.setImage(UIImage.iconDrop, for: .normal)
+        $0.semanticContentAttribute = .forceRightToLeft
+        
+        $0.imageEdgeInsets = UIEdgeInsets(top: 0, left: 5, bottom: 0, right: -5)
+        $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: -5, bottom: 0, right: 5)
+    }
     
     // 테이블뷰
     
@@ -146,7 +165,9 @@ class MyPageView: UIView {
             infoStackView,
             nameLabel,
             menuBackground,
-            menuCollectionView
+            menuCollectionView,
+            reviewLabelBackground, reviewLabel,
+            filterButton
         ].forEach {
             addSubview($0)
         }
@@ -202,6 +223,25 @@ class MyPageView: UIView {
             $0.centerX.equalToSuperview()
             $0.width.equalTo(349)
             $0.height.equalTo(40)
+        }
+        
+        reviewLabelBackground.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(16)
+            $0.bottom.equalTo(reviewLabel.snp.bottom).offset(1)
+            $0.width.equalTo(121)
+            $0.height.equalTo(18)
+        }
+        
+        reviewLabel.snp.makeConstraints {
+            $0.top.equalTo(infoBackgroundView.snp.bottom).offset(28)
+            $0.left.equalToSuperview().offset(21)
+            $0.height.equalTo(27)
+        }
+        
+        filterButton.snp.makeConstraints {
+            $0.top.equalTo(reviewLabelBackground.snp.bottom).offset(16)
+            $0.right.equalToSuperview().offset(-16)
+            $0.height.equalTo(20)
         }
 
     }

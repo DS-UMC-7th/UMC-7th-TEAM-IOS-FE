@@ -15,11 +15,35 @@ class MyPageViewController: UIViewController {
         super.viewDidLoad()
         view = myPageView
         setDataSource()
+        setAction()
     }
     
     // MARK: - function
     private func setDataSource() {
         myPageView.menuCollectionView.dataSource = self
+    }
+    
+    private func setAction() {
+        myPageView.filterButton.addTarget(self, action: #selector(filterButtonTapped(_ :)), for: .touchUpInside)
+    }
+    
+    // MARK: - action
+    @objc
+    func filterButtonTapped(_ sender: UIButton) {
+        let option1 = UIAction(title: "별점 높은 순") { action in
+            self.myPageView.filterButton.setTitle(action.title, for: .normal)
+        }
+        let option2 = UIAction(title: "최신순") { action in
+            self.myPageView.filterButton.setTitle(action.title, for: .normal)
+        }
+        let option3 = UIAction(title: "공감 많은 순") { action in
+            self.myPageView.filterButton.setTitle(action.title, for: .normal)
+        }
+        
+        let menu = UIMenu(children: [option1, option2, option3])
+        
+        sender.menu = menu
+        sender.showsMenuAsPrimaryAction = true
     }
 
 }
