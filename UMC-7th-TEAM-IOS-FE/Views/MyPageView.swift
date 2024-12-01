@@ -18,8 +18,9 @@ class MyPageView: UIView {
         
         makeStackView()
         setView()
+        setScrollView()
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError()
     }
@@ -81,7 +82,7 @@ class MyPageView: UIView {
         $0.attributedText = attributedString
         $0.textColor = .white
     }
-
+    
     
     private let emailLabel = UILabel().then {
         $0.text = "ks18mskd9@naver.com"
@@ -109,6 +110,12 @@ class MyPageView: UIView {
         $0.backgroundColor = UIColor(red: 227/255, green: 241/255, blue: 255/255, alpha: 1)
         $0.isScrollEnabled = false
         $0.register(MyPageMenuCollectionViewCell.self, forCellWithReuseIdentifier: MyPageMenuCollectionViewCell.identifier)
+    }
+    
+    // 스크롤뷰
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+        $0.showsHorizontalScrollIndicator = true
     }
     
     
@@ -146,6 +153,14 @@ class MyPageView: UIView {
     }
     
     // 더보기
+    public let moreButton = UIButton().then {
+        $0.setTitle("더보기", for: .normal)
+        $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 15)
+        $0.titleLabel?.textColor = .white
+        
+        $0.backgroundColor = UIColor(red: 33/255, green: 55/255, blue: 86/255, alpha: 1)
+        $0.layer.cornerRadius = 24
+    }
     
     
     // MARK: - 이 책은 어땠나요?
@@ -173,9 +188,7 @@ class MyPageView: UIView {
             nameLabel,
             menuBackground,
             menuCollectionView,
-            reviewLabelBackground, reviewLabel,
-            filterButton,
-            reviewTableView
+            scrollView
         ].forEach {
             addSubview($0)
         }
@@ -233,32 +246,65 @@ class MyPageView: UIView {
             $0.height.equalTo(40)
         }
         
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(infoBackgroundView.snp.bottom)
+            $0.horizontalEdges.equalToSuperview()
+            $0.bottom.equalTo(safeAreaLayoutGuide)
+        }
+        
+    }
+    
+    private func setScrollView() {
+        let contentView = UIView()
+        scrollView.addSubview(contentView)
+
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+
+        [
+            reviewLabelBackground, reviewLabel,
+            filterButton,
+            reviewTableView,
+            moreButton
+        ].forEach {
+            contentView.addSubview($0)
+        }
+
         reviewLabelBackground.snp.makeConstraints {
             $0.left.equalToSuperview().offset(16)
             $0.bottom.equalTo(reviewLabel.snp.bottom).offset(1)
             $0.width.equalTo(121)
             $0.height.equalTo(18)
         }
-        
+
         reviewLabel.snp.makeConstraints {
-            $0.top.equalTo(infoBackgroundView.snp.bottom).offset(28)
+            $0.top.equalToSuperview().offset(28)
             $0.left.equalToSuperview().offset(21)
             $0.height.equalTo(27)
         }
-        
+
         filterButton.snp.makeConstraints {
             $0.top.equalTo(reviewLabelBackground.snp.bottom).offset(16)
             $0.right.equalToSuperview().offset(-16)
             $0.height.equalTo(20)
         }
-        
+
         reviewTableView.snp.makeConstraints {
-            $0.top.equalTo(filterButton.snp.bottom)
+            $0.top.equalTo(filterButton.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.height.equalTo(444)
         }
 
+        moreButton.snp.makeConstraints {
+            $0.top.equalTo(reviewTableView.snp.bottom).offset(16)
+            $0.horizontalEdges.equalToSuperview().inset(16)
+            $0.bottom.equalTo(scrollView.snp.bottom).offset(-16)
+            $0.height.equalTo(44)
+        }
     }
 
-
+    
+    
 }

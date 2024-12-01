@@ -10,7 +10,9 @@ import UIKit
 class MyPageViewController: UIViewController {
     private let myPageView = MyPageView()
     private let data = MyPageMenuModel.dummy()
-
+    private var isExpanded = false
+    private var visibleReviewCount = 3
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view = myPageView
@@ -27,6 +29,7 @@ class MyPageViewController: UIViewController {
     
     private func setAction() {
         myPageView.filterButton.addTarget(self, action: #selector(filterButtonTapped(_ :)), for: .touchUpInside)
+        myPageView.moreButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
     }
     
     // MARK: - action
@@ -47,7 +50,23 @@ class MyPageViewController: UIViewController {
         sender.menu = menu
         sender.showsMenuAsPrimaryAction = true
     }
-
+    
+    @objc
+    private func moreButtonTapped(_ sender: UIButton) {
+        isExpanded.toggle()
+        visibleReviewCount = isExpanded ? 7 : 3
+        myPageView.moreButton.setTitle(isExpanded ? "접기" : "더보기", for: .normal)
+        
+        UIView.animate(withDuration: 0) { [weak self] in
+            guard let self = self else { return }
+            self.myPageView.reviewTableView.snp.updateConstraints {
+                $0.height.equalTo(148 * self.visibleReviewCount)
+            }
+            self.myPageView.layoutIfNeeded()
+        }
+        myPageView.reviewTableView.reloadData()
+    }
+    
 }
 
 extension MyPageViewController: UICollectionViewDataSource {
@@ -71,7 +90,8 @@ extension MyPageViewController: UICollectionViewDataSource {
 
 extension MyPageViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        MyPageReviewModel.dummy().count
+        let reviews = MyPageReviewModel.dummy()
+        return min(reviews.count, visibleReviewCount)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
