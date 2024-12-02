@@ -1,0 +1,12 @@
+//
+//  CellHeaderProtocol.swift
+//  UMC-7th-TEAM-IOS-FE
+//
+//  Created by 선가연 on 12/2/24.
+//
+
+import UIKit
+
+protocol CellHeaderProtocol {
+    var headerTitle: UILabel { get }
+}
