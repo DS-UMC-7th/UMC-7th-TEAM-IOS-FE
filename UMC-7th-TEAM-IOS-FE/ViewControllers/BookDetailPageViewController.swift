@@ -15,10 +15,10 @@ class BookDetailViewController: UIViewController {
         super.viewDidLoad()
         view = bookDetailView
 
-        bookDetailView.collectionView.dataSource = self
+        bookDetailView.bookDetailCell.configure(with: data)
     }
 }
-
+/*
 extension BookDetailViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 1
@@ -32,4 +32,4 @@ extension BookDetailViewController: UICollectionViewDataSource {
         cell.configure(with: data)
         return cell
     }
-}
+}*/

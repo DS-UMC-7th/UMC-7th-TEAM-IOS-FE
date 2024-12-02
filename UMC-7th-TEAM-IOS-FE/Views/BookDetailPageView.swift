@@ -8,6 +8,8 @@
 import UIKit
 
 class BookDetailView: UIView {
+    let bookDetailCell = BookDetailCell()
+    
     // MARK: - init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,7 +22,7 @@ class BookDetailView: UIView {
     }
     
     // MARK: - 
-    let collectionView: UICollectionView = {
+    /*let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         layout.itemSize = CGSize(width: UIScreen.main.bounds.width, height: 400)
@@ -29,12 +31,37 @@ class BookDetailView: UIView {
         collectionView.register(BookDetailCell.self, forCellWithReuseIdentifier: BookDetailCell.identifier)
         return collectionView
     }()
+     collectionView.snp.makeConstraints {
+         $0.edges.equalToSuperview()
+     }
+     */
+    //스크롤뷰
+    let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = true
+    }
+    
+    private let contentView = UIView().then {
+        $0.backgroundColor = .white
+    }
     
     private func setupView() {
-        addSubview(collectionView)
-
-        collectionView.snp.makeConstraints {
+        addSubview(scrollView)
+        scrollView.addSubview(contentView)
+        contentView.addSubview(bookDetailCell)
+        
+        scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        
+        bookDetailCell.snp.makeConstraints {
+            $0.top.left.right.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-20)
+        }
     }
+    
 }

@@ -111,10 +111,11 @@ class BookDetailCell: UICollectionViewCell {
     
     // MARK: - 정렬 및 필터 버튼
     private let sortButton = UIButton().then {
-        $0.setTitle("별점 높은 순", for: .normal)
+        $0.setTitle("별점 높은 순 ", for: .normal)
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
         $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+        $0.tintColor = UIColor(red: 117/255, green: 148/255, blue: 193/255, alpha: 1)
         $0.semanticContentAttribute = .forceRightToLeft
     }
     
