@@ -13,7 +13,7 @@ class SearchBarCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupView()
+        addComponents()
         constraints()
     }
     
@@ -41,7 +41,7 @@ class SearchBarCell: UICollectionViewCell {
         $0.setImage(UIImage(named: "icon_search"), for: .normal)
     }
     
-    private func setupView() {
+    private func addComponents() {
         contentView.addSubview(searchBar)
         searchBar.addSubview(searchTextField)
         searchBar.addSubview(searchButton)

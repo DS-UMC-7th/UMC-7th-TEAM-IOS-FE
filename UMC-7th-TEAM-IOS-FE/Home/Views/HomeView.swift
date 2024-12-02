@@ -33,9 +33,10 @@ class HomeView: UIView {
         /* 셀 등록 */
         collectionView.register(SearchBarCell.self, forCellWithReuseIdentifier: SearchBarCell.identifier)
         collectionView.register(AdBannerCell.self, forCellWithReuseIdentifier: AdBannerCell.identifier)
+        collectionView.register(RecommendationCell.self, forCellWithReuseIdentifier: RecommendationCell.identifier)
         
         /* 헤더 등록 */
-//        collectionView.register(BaseCellHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BaseCellHeader.identifier)
+        collectionView.register(BaseCellHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BaseCellHeader.identifier)
 
         return collectionView
     }()

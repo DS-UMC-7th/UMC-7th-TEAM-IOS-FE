@@ -47,7 +47,7 @@ class HomeHeaderView: UIView {
     // 제약조건 설정
     private func constraints() {
         logoImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(60)
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(16)
             $0.width.equalTo(104)
             $0.height.equalTo(24)
