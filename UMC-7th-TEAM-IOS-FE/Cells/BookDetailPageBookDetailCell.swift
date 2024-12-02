@@ -29,6 +29,12 @@ class BookDetailCell: UICollectionViewCell {
         $0.backgroundColor = UIColor(red: 33/255, green: 56/255, blue: 86/255, alpha: 1)
     }
     
+    private let backIconView = UIImageView().then {
+        $0.image = UIImage(systemName: "chevron.left")
+        $0.tintColor = .white
+        $0.contentMode = .scaleAspectFit
+    }
+    
     private let coverImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.clipsToBounds = true
@@ -124,7 +130,7 @@ class BookDetailCell: UICollectionViewCell {
     private var sortOptionButtons: [UIButton] = []
     // MARK: - function
     func setupView() {
-        [topBackgroundView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel,bookInfoBackgroundView,bookInfoTitleLabel,bookInfoContentLabel, ratingContainerView, averageRatingLabel,starStackView, totalReviewsLabel, ratingGraphStackView].forEach { contentView.addSubview($0) }
+        [topBackgroundView, backIconView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel,bookInfoBackgroundView,bookInfoTitleLabel,bookInfoContentLabel, ratingContainerView, averageRatingLabel,starStackView, totalReviewsLabel, ratingGraphStackView].forEach { contentView.addSubview($0) }
         
         topBackgroundView.snp.makeConstraints {
             $0.top.equalToSuperview()
@@ -134,10 +140,17 @@ class BookDetailCell: UICollectionViewCell {
             $0.horizontalEdges.equalToSuperview()
         }
         
+        backIconView.snp.makeConstraints {
+            $0.width.equalTo(8)
+            $0.height.equalTo(16)
+            $0.top.equalTo(topBackgroundView.snp.top).offset(56)
+            $0.left.equalTo(topBackgroundView.snp.left).offset(16)
+        }
+        
         coverImageView.snp.makeConstraints {
             $0.width.equalTo(84)
             $0.height.equalTo(124)
-            $0.top.equalTo(topBackgroundView.snp.top).offset(76)
+            $0.top.equalTo(topBackgroundView.snp.top).offset(75)
             $0.left.equalTo(topBackgroundView.snp.left).offset(138)
             $0.centerX.equalToSuperview()
         }
