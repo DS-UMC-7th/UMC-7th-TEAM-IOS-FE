@@ -1,5 +1,5 @@
 //
-//  BookDetailCell.swift
+//  BookDetailPageBookDetailCell.swift
 //  UMC-7th-TEAM-IOS-FE
 //
 //  Created by 신연주 on 12/1/24.
@@ -23,6 +23,7 @@ class BookDetailCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    // MARK: - layout
     // MARK: - 책 프로필 이미지
     let topBackgroundView = UIView().then {
         $0.backgroundColor = UIColor(red: 33/255, green: 56/255, blue: 86/255, alpha: 1)
@@ -107,10 +108,6 @@ class BookDetailCell: UICollectionViewCell {
         $0.setTitle("별점 높은 순", for: .normal)
         $0.setTitleColor(.black, for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 14)
-        $0.backgroundColor = UIColor.white
-        $0.layer.borderColor = UIColor.lightGray.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 4
         $0.setImage(UIImage(systemName: "chevron.down"), for: .normal)
         $0.semanticContentAttribute = .forceRightToLeft
     }
@@ -130,17 +127,19 @@ class BookDetailCell: UICollectionViewCell {
         [topBackgroundView, coverImageView, subtitleBackgroundView,titleLabel, descriptionLabel,bookInfoBackgroundView,bookInfoTitleLabel,bookInfoContentLabel, ratingContainerView, averageRatingLabel,starStackView, totalReviewsLabel, ratingGraphStackView].forEach { contentView.addSubview($0) }
         
         topBackgroundView.snp.makeConstraints {
+            $0.top.equalToSuperview()
             $0.width.equalTo(360)
             $0.height.equalTo(380)
-            $0.top.equalToSuperview()
             $0.centerX.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview()
         }
         
         coverImageView.snp.makeConstraints {
             $0.width.equalTo(84)
             $0.height.equalTo(124)
-            $0.top.equalTo(topBackgroundView.snp.top).offset(75)
+            $0.top.equalTo(topBackgroundView.snp.top).offset(76)
             $0.left.equalTo(topBackgroundView.snp.left).offset(138)
+            $0.centerX.equalToSuperview()
         }
         
         subtitleBackgroundView.snp.makeConstraints {
@@ -165,10 +164,12 @@ class BookDetailCell: UICollectionViewCell {
             $0.top.equalTo(titleLabel.snp.bottom).offset(19)
             $0.centerX.equalTo(topBackgroundView)
         }
+        
+        //
         bookInfoBackgroundView.snp.makeConstraints {
             $0.width.equalTo(320)
             $0.height.equalTo(112)
-            $0.top.equalTo(descriptionLabel.snp.bottom).offset(20)
+            $0.top.equalTo(topBackgroundView.snp.bottom).offset(16)
             $0.left.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
         }
@@ -177,7 +178,7 @@ class BookDetailCell: UICollectionViewCell {
             $0.width.equalTo(56)
             $0.height.equalTo(88)
             $0.top.equalTo(bookInfoBackgroundView).offset(12)
-            $0.left.equalTo(bookInfoBackgroundView).offset(12)
+            $0.left.equalTo(bookInfoBackgroundView.snp.left).offset(23)
         }
         
         bookInfoContentLabel.snp.makeConstraints {
@@ -187,32 +188,36 @@ class BookDetailCell: UICollectionViewCell {
             $0.left.equalTo(bookInfoTitleLabel.snp.right).offset(20)
         }
         
+        //
         ratingContainerView.snp.makeConstraints {
             $0.width.equalTo(320)
             $0.height.equalTo(112)
             $0.top.equalTo(bookInfoBackgroundView.snp.bottom).offset(20)
+            $0.left.equalToSuperview().offset(20)
             $0.centerX.equalToSuperview()
             
         }
         
         averageRatingLabel.snp.makeConstraints {
-            $0.top.left.equalTo(ratingContainerView).offset(12)
+            $0.top.equalTo(ratingContainerView)
+            $0.left.equalTo(ratingContainerView).offset(25)
+            
         }
         
         starStackView.snp.makeConstraints {
             //$0.centerY.equalTo(averageRatingLabel)
-            $0.top.equalTo(averageRatingLabel.snp.bottom).offset(8)
-            $0.left.equalTo(averageRatingLabel)
+            $0.top.equalTo(averageRatingLabel.snp.bottom).offset(4)
+            $0.left.equalTo(ratingContainerView)
         }
         
         totalReviewsLabel.snp.makeConstraints {
             $0.top.equalTo(starStackView.snp.bottom).offset(8)
-            $0.left.equalTo(averageRatingLabel)
+            $0.left.equalTo(ratingContainerView).offset(8)
         }
         
         ratingGraphStackView.snp.makeConstraints {
             $0.centerY.equalTo(ratingContainerView)
-            $0.right.equalTo(ratingContainerView).offset(-160)
+            $0.left.equalTo(starStackView.snp.right).offset(10)
         }
     }
     
@@ -267,7 +272,15 @@ class BookDetailCell: UICollectionViewCell {
     
     func configureRatingGraph(with distribution: [Int]) {
         ratingGraphStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        
         for (index, percentage) in distribution.enumerated().reversed() {
+            let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
+            starImageView.tintColor = UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1)
+            starImageView.contentMode = .scaleAspectFit
+            starImageView.snp.makeConstraints {
+                $0.width.height.equalTo(16)
+            }
+            
             let starLabel = UILabel()
             starLabel.text = "\(index + 1)"
             starLabel.font = .systemFont(ofSize: 12)
@@ -276,13 +289,7 @@ class BookDetailCell: UICollectionViewCell {
             let barView = UIView()
             barView.backgroundColor = UIColor(red: 117/255, green: 148/255, blue: 193/255, alpha: 1)
             barView.layer.cornerRadius = 4
-            
-            let starImageView = UIImageView(image: UIImage(systemName: "star.fill"))
-            starImageView.tintColor = UIColor(red: 255/255, green: 215/255, blue: 0/255, alpha: 1)
-            starImageView.contentMode = .scaleAspectFit
-            starImageView.snp.makeConstraints {
-                $0.width.height.equalTo(12)
-            }
+        
             
             let percentageLabel = UILabel()
             percentageLabel.text = "\(percentage)%"
@@ -294,15 +301,19 @@ class BookDetailCell: UICollectionViewCell {
             
             starImageView.snp.makeConstraints {
                 $0.left.centerY.equalToSuperview()
+                //$0.top.centerY.equalToSuperview()
             }
+        
             starLabel.snp.makeConstraints {
-                $0.left.equalTo(starImageView.snp.right).offset(4)
-                $0.left.centerY.equalToSuperview()
+                $0.top.equalTo(starImageView)
+                $0.left.equalTo(starImageView.snp.right).offset(5)
+
+                
             }
             barView.snp.makeConstraints {
                 $0.left.equalTo(starLabel.snp.right).offset(4)
                 $0.centerY.equalToSuperview()
-                $0.width.equalTo(percentage * 2)
+                $0.width.equalTo(percentage * 3)
                 $0.height.equalTo(8)
             }
             percentageLabel.snp.makeConstraints {
@@ -319,7 +330,7 @@ class BookDetailCell: UICollectionViewCell {
         sortButton.snp.makeConstraints {
             $0.width.equalTo(96)
             $0.height.equalTo(20)
-            $0.top.equalTo(ratingContainerView.snp.bottom).offset(20)
+            $0.top.equalTo(ratingContainerView.snp.bottom).offset(28)
             $0.right.equalToSuperview().offset(-20)
         }
         

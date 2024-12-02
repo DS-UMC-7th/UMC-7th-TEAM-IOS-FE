@@ -1,5 +1,5 @@
 //
-//  BookDetailModel.swift
+//  BookDetailPageBookDetailModel.swift
 //  UMC-7th-TEAM-IOS-FE
 //
 //  Created by 신연주 on 12/1/24.

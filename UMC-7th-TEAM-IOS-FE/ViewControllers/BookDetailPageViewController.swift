@@ -1,5 +1,5 @@
 //
-//  BookDetailViewController.swift
+//  BookDetailPageViewController.swift
 //  UMC-7th-TEAM-IOS-FE
 //
 //  Created by 신연주 on 11/29/24.
