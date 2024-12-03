@@ -9,9 +9,9 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private var recommendedBooks: [BookModel] = []
-    private var popularBooks: [BookModel] = []
-    private var latestBooks: [BookModel] = []
+    private lazy var recommendedBooks: [BookModel] = []
+    private lazy var popularBooks: [BookModel] = []
+    private lazy var latestBooks: [BookModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +73,36 @@ class HomeViewController: UIViewController {
         
     }
     
+    private func loadMorePopularBooks() {
+        let currentCount = popularBooks.count
+        HomeService.shared.fetchBooks(sortedBy: "popular", page: currentCount / 10, size: 10) { [weak self] result in
+            switch result {
+            case .success(let newBooks):
+                self?.popularBooks.append(contentsOf: newBooks)
+                DispatchQueue.main.async {
+                    self?.homeView.homeCollectionView.reloadSections(IndexSet(integer: 3))
+                }
+            case .failure(let error):
+                print("Error fetching more popular books: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    private func loadMoreLatestBooks() {
+        let currentCount = latestBooks.count
+        HomeService.shared.fetchBooks(sortedBy: "latest", page: currentCount / 10, size: 10) { [weak self] result in
+            switch result {
+            case .success(let newBooks):
+                self?.latestBooks.append(contentsOf: newBooks)
+                DispatchQueue.main.async {
+                    self?.homeView.homeCollectionView.reloadSections(IndexSet(integer: 4))
+                }
+            case .failure(let error):
+                print("Error fetching more latest books: \(error.localizedDescription)")
+            }
+        }
+    }
+    
     override func loadView() {
         self.view = homeView
         print("HomeView set as main view")
@@ -124,13 +154,22 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             return UICollectionViewCell()
         }
     }
-
     
+    @objc private func moreButtonDipTap(_ sender: UIButton) {
+        if sender.tag == 3 {
+            loadMorePopularBooks()
+        } else if sender.tag == 4 {
+            loadMoreLatestBooks()
+        }
+    }
+
     // 헤더 및 푸터 설정
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionFooter:
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MoreButtonFooter.identifier, for: indexPath) as! MoreButtonFooter
+            footer.moreButton.addTarget(self, action: #selector(moreButtonDipTap(_:)), for: .touchUpInside)
+            footer.moreButton.tag = indexPath.section
             return footer
         case UICollectionView.elementKindSectionHeader:
             let baseHeader = collectionView.dequeueReusableSupplementaryView(
