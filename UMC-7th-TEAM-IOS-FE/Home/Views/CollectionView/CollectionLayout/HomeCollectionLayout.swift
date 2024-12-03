@@ -18,8 +18,8 @@ class HomeCollectionLayout {
                 return createBannerSection()
             case 2: // 추천 도서 섹션
                 return createRecommendationSection()
-//            case 2: // 인기 도서 섹션
-//                return createBestSellerSection()
+            case 3: // 인기 도서 섹션
+                return createBestSellerSection()
 //            case 3: // 신간 도서 섹션
 //                return createNewBookSection()
             default:
@@ -78,20 +78,23 @@ class HomeCollectionLayout {
     }
     
     // 인기 섹션 생성
-//    private static func createBestSellerSection() -> NSCollectionLayoutSection {
-//        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
-//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//        
-//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalHeight(0.9), heightDimension: .absolute(120))
-//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-//        
-//        let section = NSCollectionLayoutSection(group: group)
-//        section.orthogonalScrollingBehavior = .continuous
-//        section.interGroupSpacing = 12
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20)
-//        section.boundarySupplementaryItems = [createHeaderItem()]
-//        return section
-//    }
+    private static func createBestSellerSection() -> NSCollectionLayoutSection {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(130))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(130))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+//        group.interItemSpacing = .fixed(8)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 20, bottom: 20, trailing: 20)
+        section.interGroupSpacing = 26
+        
+        let header = createHeaderItem()
+        section.boundarySupplementaryItems = [header]
+        
+        return section
+    }
     
 //    /// 유저 스토리 섹션 생성
 //    private static func createUserStorySection() -> NSCollectionLayoutSection {

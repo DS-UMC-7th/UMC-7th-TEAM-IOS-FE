@@ -53,7 +53,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return 4
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -65,6 +65,8 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         case 2: // 추천 섹션
             print("Recommended books count: \(recommendedBooks.count)")
             return recommendedBooks.count
+        case 3:
+            return HomeCellModel.bestSellerData.count
         default:
             return 0
         }
@@ -85,6 +87,11 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             let centerPoint = CGPoint(x: collectionView.bounds.midX, y: collectionView.bounds.midY)
             let isCentered = collectionView.indexPathForItem(at: centerPoint) == indexPath
             cell.configure(with: recommendedBooks[indexPath.row], isCentered: isCentered)
+            return cell
+        case 3:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BestSellerCell.identifier, for: indexPath) as! BestSellerCell
+            let data = HomeCellModel.bestSellerData[indexPath.row]
+            cell.configure(model: data, count: indexPath.row + 1)
             return cell
         default:
             return UICollectionViewCell()

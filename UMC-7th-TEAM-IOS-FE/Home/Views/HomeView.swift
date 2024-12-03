@@ -34,6 +34,7 @@ class HomeView: UIView {
         collectionView.register(SearchBarCell.self, forCellWithReuseIdentifier: SearchBarCell.identifier)
         collectionView.register(AdBannerCell.self, forCellWithReuseIdentifier: AdBannerCell.identifier)
         collectionView.register(RecommendationCell.self, forCellWithReuseIdentifier: RecommendationCell.identifier)
+        collectionView.register(BestSellerCell.self, forCellWithReuseIdentifier: BestSellerCell.identifier)
         
         /* 헤더 등록 */
         collectionView.register(BaseCellHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BaseCellHeader.identifier)
