@@ -97,7 +97,7 @@ class BestSellerCell: UICollectionViewCell {
         }
         
         bookImageView.snp.makeConstraints {
-            $0.leading.equalTo(countLabel.snp.trailing).offset(15)
+            $0.leading.equalToSuperview().offset(20)
             $0.top.bottom.equalToSuperview()
             $0.height.equalTo(124)
             $0.width.equalTo(bookImageView.snp.height).multipliedBy(3.0 / 4.0)
