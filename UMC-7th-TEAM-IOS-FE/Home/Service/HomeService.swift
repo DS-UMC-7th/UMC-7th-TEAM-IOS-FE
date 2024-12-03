@@ -13,7 +13,8 @@ final class HomeService {
     static let shared = HomeService()
     private init() {}
     
-    func fetchRecommendedBooks(sortedBy: String = "highest", page: Int = 0, size: Int = 3, completion: @escaping (Result<[BookModel], Error>) -> Void) {
+    // 추천 도서
+    func fetchBooks(sortedBy: String, page: Int, size: Int, completion: @escaping (Result<[BookModel], Error>) -> Void) {
         let baseURL = "http://ec2-3-39-137-120.ap-northeast-2.compute.amazonaws.com:8080/books"
         let parameters: [String: Any] = [
             "sortedBy": sortedBy,
@@ -32,5 +33,4 @@ final class HomeService {
                 }
             }
     }
-    
 }

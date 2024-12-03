@@ -9,7 +9,8 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private var recommendedBooks: [BookModel] = []
+    private lazy var recommendedBooks: [BookModel] = []
+    private lazy var popularBooks: [BookModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,18 +27,33 @@ class HomeViewController: UIViewController {
     }()
     
     private func fetchBooks() {
-        HomeService.shared.fetchRecommendedBooks(sortedBy: "highest", page: 0, size: 3) { [weak self] result in
+        let group = DispatchGroup()
+        
+        HomeService.shared.fetchBooks(sortedBy: "highest", page: 0, size: 3) { [weak self] result in
             switch result {
             case .success(let books):
-                print("Books fetched: \(books)")
+//                print("Books fetched: \(books)")
                 self?.recommendedBooks = books
-                DispatchQueue.main.async {
-                    self?.homeView.homeCollectionView.reloadData() // 데이터 가져온 후 UI 갱신
-                }
             case .failure(let error):
                 print("Error fetching books: \(error.localizedDescription)")
             }
         }
+    
+        HomeService.shared.fetchBooks(sortedBy: "popular", page: 0, size: 3) { [weak self] result in
+            switch result {
+            case .success(let books):
+                print("Books fetched: \(books)")
+                self?.popularBooks = books
+            case .failure(let error):
+                print("Error fetching books: \(error.localizedDescription)")
+            }
+        }
+        
+        // 로딩 종료 및 UI 갱신
+        group.notify(queue: .main) {
+            self.homeView.homeCollectionView.reloadData()
+        }
+        
     }
     
     override func loadView() {
@@ -57,7 +73,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         case 0: return 1
         case 1: return HomeCellModel.bannerData.count
         case 2: return recommendedBooks.count
-        case 3: return HomeCellModel.bestSellerData.count
+        case 3: return popularBooks.count
         case 4: return HomeCellModel.bestSellerData.count
         default:
             return 0
@@ -88,7 +104,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 //            } else {
 //                // 책 아이템
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BestSellerCell.identifier, for: indexPath) as! BestSellerCell
-            cell.configure(model: HomeCellModel.bestSellerData[indexPath.row], count: indexPath.row + 1)
+            cell.configure(with: popularBooks[indexPath.row], count: indexPath.row + 1)
             return cell
 //            }
         case 4:

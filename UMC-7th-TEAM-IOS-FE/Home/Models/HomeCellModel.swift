@@ -31,7 +31,7 @@ struct BookModel: Codable {
     let title: String
     let author: String
     let publisher: String
-    let rating: Double
+    let rating: Double?
     let reviewCount: Int
     let description: String
 }
