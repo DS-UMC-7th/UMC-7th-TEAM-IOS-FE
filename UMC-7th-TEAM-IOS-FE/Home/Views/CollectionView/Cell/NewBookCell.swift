@@ -25,6 +25,10 @@ class NewBookCell: UICollectionViewCell {
         $0.image = UIImage(named: "home_book_sample")
         $0.contentMode = .scaleAspectFit
         $0.clipsToBounds = true
+        $0.layer.shadowOpacity = 0.3
+        $0.layer.shadowOffset = CGSize(width: 3, height: 4)
+        $0.layer.shadowRadius = 4
+        $0.layer.masksToBounds = false
     }
     
     private let titleLabel = UILabel().then {

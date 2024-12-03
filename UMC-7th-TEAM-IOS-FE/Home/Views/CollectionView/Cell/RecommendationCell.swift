@@ -25,6 +25,11 @@ class RecommendationCell: UICollectionViewCell {
     private let bookImageView = UIImageView().then {
         $0.contentMode = .scaleAspectFit
         $0.clipsToBounds = true
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.4
+        $0.layer.shadowOffset = CGSize(width: 3, height: 3)
+        $0.layer.shadowRadius = 6
+        $0.layer.masksToBounds = false
     }
     
     private let countView = UIView().then {
