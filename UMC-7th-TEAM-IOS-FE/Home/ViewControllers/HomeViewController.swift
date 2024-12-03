@@ -9,9 +9,9 @@ import UIKit
 
 class HomeViewController: UIViewController {
     
-    private lazy var recommendedBooks: [BookModel] = []
-    private lazy var popularBooks: [BookModel] = []
-    private lazy var latestBooks: [BookModel] = []
+    private var recommendedBooks: [BookModel] = []
+    private var popularBooks: [BookModel] = []
+    private var latestBooks: [BookModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,7 +41,7 @@ class HomeViewController: UIViewController {
                 print("Error fetching books: \(error.localizedDescription)")
             }
         }
-    
+        
         group.enter()
         HomeService.shared.fetchBooks(sortedBy: "popular", page: 0, size: 3) { [weak self] result in
             defer { group.leave() }
@@ -109,21 +109,13 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendationCell.identifier, for: indexPath) as! RecommendationCell
-            let centerPoint = CGPoint(x: collectionView.bounds.midX, y: collectionView.bounds.midY)
-            let isCentered = collectionView.indexPathForItem(at: centerPoint) == indexPath
-            cell.configure(with: recommendedBooks[indexPath.row], isCentered: isCentered)
+            cell.configure(with: recommendedBooks[indexPath.row])
             return cell
         case 3:
-//            if indexPath.row == 0 {
-//                // 필터 아이템
-//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCell.identifier, for: indexPath) as! FilterCell
-//                return cell
-//            } else {
-//                // 책 아이템
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BestSellerCell.identifier, for: indexPath) as! BestSellerCell
             cell.configure(with: popularBooks[indexPath.row], count: indexPath.row + 1)
             return cell
-//            }
+            //            }
         case 4:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewBookCell.identifier, for: indexPath) as! NewBookCell
             cell.configure(with: latestBooks[indexPath.row], count: indexPath.row + 1)
@@ -132,8 +124,9 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             return UICollectionViewCell()
         }
     }
+
     
-    // 헤더 설정
+    // 헤더 및 푸터 설정
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
         case UICollectionView.elementKindSectionFooter:
@@ -154,25 +147,11 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             } else if indexPath.section == 4 {
                 baseHeader.configure(title: "새로 나왔어요")
             }
+            
             return baseHeader
         default:
             return UICollectionReusableView()
         }
     }
-}
 
-extension HomeViewController: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        guard let collectionView = scrollView as? UICollectionView else { return }
-        let centerPoint = CGPoint(x: collectionView.bounds.midX, y: collectionView.bounds.midY)
-        if let centerIndexPath = collectionView.indexPathForItem(at: centerPoint) {
-            collectionView.visibleCells.forEach { cell in
-                if let indexPath = collectionView.indexPath(for: cell),
-                   let recommendationCell = cell as? RecommendationCell {
-                    let isCentered = indexPath == centerIndexPath
-                    recommendationCell.configure(with: recommendedBooks[indexPath.row], isCentered: isCentered)
-                }
-            }
-        }
-    }
 }
