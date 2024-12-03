@@ -38,7 +38,7 @@ class SearchBarCell: UICollectionViewCell {
     
     // 검색 버튼
     lazy var searchButton = UIButton().then {
-        $0.setImage(UIImage(named: "icon_search"), for: .normal)
+        $0.setImage(UIImage(named: "home_icon_search"), for: .normal)
     }
     
     private func addComponents() {
@@ -62,7 +62,7 @@ class SearchBarCell: UICollectionViewCell {
         searchButton.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().offset(-16)
-            $0.width.height.equalTo(15)
+            $0.width.height.equalTo(20)
         }
     }
 }

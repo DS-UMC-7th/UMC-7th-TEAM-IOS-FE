@@ -29,14 +29,12 @@ class HomeHeaderView: UIView {
     
     // 알림 버튼
     private let notificationButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "bell"), for: .normal)
-        $0.tintColor = .black
+        $0.setImage(UIImage(named: "home_icon_bell"), for: .normal)
     }
     
     // 메뉴 버튼
     private let menuButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "line.3.horizontal"), for: .normal)
-        $0.tintColor = .black
+        $0.setImage(UIImage(named: "home_icon_menu"), for: .normal)
     }
     
     // 컴포넌트 생성
@@ -57,13 +55,13 @@ class HomeHeaderView: UIView {
         notificationButton.snp.makeConstraints {
             $0.centerY.equalTo(logoImageView.snp.centerY)
             $0.trailing.equalTo(menuButton.snp.leading).offset(-16)
-            $0.width.height.equalTo(16)
+            $0.width.height.equalTo(20)
         }
         
         menuButton.snp.makeConstraints {
             $0.centerY.equalTo(logoImageView.snp.centerY)
             $0.trailing.equalToSuperview().offset(-18)
-            $0.width.height.equalTo(16)
+            $0.width.height.equalTo(20)
         }
     }
 }
