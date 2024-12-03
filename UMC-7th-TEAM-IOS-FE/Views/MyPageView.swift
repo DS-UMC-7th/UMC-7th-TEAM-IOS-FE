@@ -160,7 +160,7 @@ class MyPageView: UIView {
         $0.titleLabel?.textColor = .white
         
         $0.backgroundColor = UIColor(red: 33/255, green: 55/255, blue: 86/255, alpha: 1)
-        $0.layer.cornerRadius = 24
+        $0.layer.cornerRadius = 22
     }
     
     
@@ -197,7 +197,14 @@ class MyPageView: UIView {
     }
     
     // 리뷰 작성
-    
+    private let reviewButton = UIButton().then {
+        $0.setTitle("리뷰 작성", for: .normal)
+        $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 15)
+        $0.setTitleColor(UIColor(red: 33/255, green: 56/255, blue: 86/255, alpha: 1), for: .normal)
+        
+        $0.backgroundColor = UIColor(red: 227/255, green: 241/255, blue: 255/255, alpha: 1)
+        $0.layer.cornerRadius = 18
+    }
     
     // MARK: - function
     private func makeStackView() {
@@ -299,7 +306,8 @@ class MyPageView: UIView {
             bookLabelBackground, bookLabel,
             bookSlideCollectionView,
             bookSlideTitleLabel,
-            bookSlideInfoLabel
+            bookSlideInfoLabel,
+            reviewButton
         ].forEach {
             contentView.addSubview($0)
         }
@@ -364,10 +372,15 @@ class MyPageView: UIView {
             $0.top.equalTo(bookSlideTitleLabel.snp.bottom).offset(4)
             $0.centerX.equalToSuperview()
             $0.height.equalTo(14)
+        }
+        
+        reviewButton.snp.makeConstraints {
+            $0.top.equalTo(bookSlideInfoLabel.snp.bottom).offset(16)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(118)
+            $0.height.equalTo(36)
             $0.bottom.equalTo(scrollView.snp.bottom).offset(-16)
         }
     }
-
-    
-    
+  
 }
