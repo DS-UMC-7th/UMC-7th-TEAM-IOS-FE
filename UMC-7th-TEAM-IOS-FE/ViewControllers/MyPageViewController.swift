@@ -9,7 +9,8 @@ import UIKit
 
 class MyPageViewController: UIViewController {
     private let myPageView = MyPageView()
-    private let data = MyPageMenuModel.dummy()
+    private let menuData = MyPageMenuModel.dummy()
+    private let bookData = MyPageBookModel.dummy()
     private var isExpanded = false
     private var visibleReviewCount = 3
     
@@ -18,6 +19,7 @@ class MyPageViewController: UIViewController {
         view = myPageView
         setDataSource()
         setAction()
+        print(bookData)
     }
     
     // MARK: - function
@@ -25,6 +27,7 @@ class MyPageViewController: UIViewController {
         myPageView.menuCollectionView.dataSource = self
         myPageView.reviewTableView.dataSource = self
         myPageView.reviewTableView.delegate = self
+        myPageView.bookSlideCollectionView.dataSource = self
     }
     
     private func setAction() {
@@ -71,18 +74,37 @@ class MyPageViewController: UIViewController {
 
 extension MyPageViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return data.count
+        if collectionView === myPageView.menuCollectionView {
+            return menuData.count
+        }
+        else if collectionView === myPageView.bookSlideCollectionView {
+            return bookData.count
+        }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyPageMenuCollectionViewCell.identifier, for: indexPath) as? MyPageMenuCollectionViewCell else {
-            return UICollectionViewCell()
+        if collectionView === myPageView.menuCollectionView {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyPageMenuCollectionViewCell.identifier, for: indexPath) as? MyPageMenuCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            let list = menuData[indexPath.row]
+            cell.menuIcon.image = list.menuIcon
+            cell.menuLabel.text = list.menuLabel
+            return cell
+        }
+        else if collectionView === myPageView.bookSlideCollectionView {
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyPageBookCollectionViewCell.identifier, for: indexPath) as? MyPageBookCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            let list = bookData[indexPath.row]
+            cell.bookImage.image = list.bookImage
+            return cell
         }
         
-        let list = data[indexPath.row]
-        cell.menuIcon.image = list.menuIcon
-        cell.menuLabel.text = list.menuLabel
-        return cell
+        return UICollectionViewCell()
     }
     
     

@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Then
+import ToosieSlide
 
 class MyPageView: UIView {
     
@@ -165,8 +166,27 @@ class MyPageView: UIView {
     
     // MARK: - 이 책은 어땠나요?
     // 타이틀
+    private let bookLabelBackground = UIView().then {
+        $0.backgroundColor = UIColor(red: 194/255, green: 221/255, blue: 248/255, alpha: 1)
+    }
+    
+    private let bookLabel = UILabel().then {
+        $0.text = "이 책은 어땠나요?"
+        $0.font = UIFont(name: "MaruBuri-Bold", size: 20)
+        $0.textColor = .black
+    }
     
     // 슬라이드
+    public let bookSlideCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCarouselLayout().then {
+        $0.itemSize = CGSize(width: 108, height: 172)
+        $0.minimumLineSpacing = 10
+        $0.nonFocusedItemsScaleFactor = 0.7
+    }).then {
+        $0.showsHorizontalScrollIndicator = false
+        $0.register(MyPageBookCollectionViewCell.self, forCellWithReuseIdentifier: MyPageBookCollectionViewCell.identifier)
+    }
+    
+    
     
     // 리뷰 작성
     
@@ -267,7 +287,9 @@ class MyPageView: UIView {
             reviewLabelBackground, reviewLabel,
             filterButton,
             reviewTableView,
-            moreButton
+            moreButton,
+            bookLabelBackground, bookLabel,
+            bookSlideCollectionView
         ].forEach {
             contentView.addSubview($0)
         }
@@ -292,7 +314,7 @@ class MyPageView: UIView {
         }
 
         reviewTableView.snp.makeConstraints {
-            $0.top.equalTo(filterButton.snp.bottom).offset(16)
+            $0.top.equalTo(filterButton.snp.bottom)
             $0.horizontalEdges.equalToSuperview().inset(16)
             $0.height.equalTo(444)
         }
@@ -300,8 +322,27 @@ class MyPageView: UIView {
         moreButton.snp.makeConstraints {
             $0.top.equalTo(reviewTableView.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.bottom.equalTo(scrollView.snp.bottom).offset(-16)
             $0.height.equalTo(44)
+        }
+        
+        bookLabelBackground.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(16)
+            $0.bottom.equalTo(bookLabel.snp.bottom).offset(1)
+            $0.width.equalTo(167)
+            $0.height.equalTo(18)
+        }
+
+        bookLabel.snp.makeConstraints {
+            $0.top.equalTo(moreButton.snp.bottom).offset(56)
+            $0.left.equalToSuperview().offset(21)
+            $0.height.equalTo(27)
+        }
+        
+        bookSlideCollectionView.snp.makeConstraints {
+            $0.top.equalTo(bookLabelBackground.snp.bottom).offset(9)
+            $0.horizontalEdges.equalToSuperview().inset(20)
+            $0.height.equalTo(200)
+            $0.bottom.equalTo(scrollView.snp.bottom).offset(-16)
         }
     }
 
