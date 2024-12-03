@@ -18,9 +18,13 @@ class HomeCollectionLayout {
                 return createBannerSection()
             case 2: // 추천 도서 섹션
                 return createRecommendationSection()
-            case 3: // 인기 도서 섹션
+            case 3:
+                return createFilterSection()
+            case 4: // 인기 도서 섹션
                 return createBestSellerSection()
-            case 4: // 신간 도서 섹션
+            case 5:
+                return createFilterSection()
+            case 6: // 신간 도서 섹션
                 return createNewBookSection()
             default:
                 return nil
@@ -44,7 +48,6 @@ class HomeCollectionLayout {
         return section
     }
     
-    
     // 배너 섹션 생성
     private static func createBannerSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0))
@@ -59,6 +62,7 @@ class HomeCollectionLayout {
         return section
     }
     
+    // 추천 섹션
     private static func createRecommendationSection() -> NSCollectionLayoutSection {
         // 아이템 크기 설정
         let itemSize = NSCollectionLayoutSize(
@@ -86,6 +90,31 @@ class HomeCollectionLayout {
         return section
     }
     
+    private static func createFilterSection() -> NSCollectionLayoutSection {
+        let filterItemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(32)
+        )
+        let filterItem = NSCollectionLayoutItem(layoutSize: filterItemSize)
+
+        // Filter 그룹
+        let filterGroupSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(32)
+        )
+        let filterGroup = NSCollectionLayoutGroup.horizontal(
+            layoutSize: filterGroupSize,
+            subitems: [filterItem]
+        )
+
+        let section = NSCollectionLayoutSection(group: filterGroup)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 70, leading: 20, bottom: 0, trailing: 20)
+        
+        section.boundarySupplementaryItems = [createHeaderItem()]
+        
+        return section
+    }
+    
     // 인기 섹션 생성
     private static func createBestSellerSection() -> NSCollectionLayoutSection {
         // 도서 아이템
@@ -97,17 +126,16 @@ class HomeCollectionLayout {
 
         let bookGroupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(160)
+            heightDimension: .estimated(130)
         )
         let bookGroup = NSCollectionLayoutGroup.vertical(layoutSize: bookGroupSize, subitems: [bookItem])
 
         // 섹션 설정
         let section = NSCollectionLayoutSection(group: bookGroup)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 70, leading: 20, bottom: 20, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 26, leading: 20, bottom: 20, trailing: 20)
         section.interGroupSpacing = 26
-
-        // 헤더와 푸터 추가
-        section.boundarySupplementaryItems = [createHeaderItem(), createFooterItem()]
+        
+        section.boundarySupplementaryItems = [createFooterItem()]
         
         return section
     }
@@ -127,11 +155,10 @@ class HomeCollectionLayout {
 
         // 섹션 설정
         let section = NSCollectionLayoutSection(group: bookGroup)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 70, leading: 20, bottom: 20, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 26, leading: 20, bottom: 20, trailing: 20)
         section.interGroupSpacing = 26
 
-        // 헤더와 푸터 추가
-        section.boundarySupplementaryItems = [createHeaderItem(), createFooterItem()]
+        section.boundarySupplementaryItems = [createFooterItem()]
         
         return section
     }

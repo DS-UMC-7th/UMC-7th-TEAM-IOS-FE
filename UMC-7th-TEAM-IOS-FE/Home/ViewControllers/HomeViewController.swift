@@ -80,14 +80,14 @@ class HomeViewController: UIViewController {
             case .success(let newBooks):
                 self?.popularBooks.append(contentsOf: newBooks)
                 DispatchQueue.main.async {
-                    self?.homeView.homeCollectionView.reloadSections(IndexSet(integer: 3))
+                    self?.homeView.homeCollectionView.reloadSections(IndexSet(integer: 4))
                 }
             case .failure(let error):
                 print("Error fetching more popular books: \(error.localizedDescription)")
             }
         }
     }
-
+    
     private func loadMoreLatestBooks() {
         let currentCount = latestBooks.count
         HomeService.shared.fetchBooks(sortedBy: "latest", page: currentCount / 10, size: 10) { [weak self] result in
@@ -95,7 +95,7 @@ class HomeViewController: UIViewController {
             case .success(let newBooks):
                 self?.latestBooks.append(contentsOf: newBooks)
                 DispatchQueue.main.async {
-                    self?.homeView.homeCollectionView.reloadSections(IndexSet(integer: 4))
+                    self?.homeView.homeCollectionView.reloadSections(IndexSet(integer: 5))
                 }
             case .failure(let error):
                 print("Error fetching more latest books: \(error.localizedDescription)")
@@ -112,7 +112,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 5
+        return 7
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -120,8 +120,10 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         case 0: return 1
         case 1: return HomeCellModel.bannerData.count
         case 2: return recommendedBooks.count
-        case 3: return popularBooks.count
-        case 4: return latestBooks.count
+        case 3: return 1
+        case 4: return popularBooks.count
+        case 5: return 1
+        case 6: return latestBooks.count
         default:
             return 0
         }
@@ -142,11 +144,16 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             cell.configure(with: recommendedBooks[indexPath.row])
             return cell
         case 3:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCell.identifier, for: indexPath) as! FilterCell
+            return cell
+        case 4:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BestSellerCell.identifier, for: indexPath) as! BestSellerCell
             cell.configure(with: popularBooks[indexPath.row], count: indexPath.row + 1)
             return cell
-            //            }
-        case 4:
+        case 5:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCell.identifier, for: indexPath) as! FilterCell
+            return cell
+        case 6:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewBookCell.identifier, for: indexPath) as! NewBookCell
             cell.configure(with: latestBooks[indexPath.row], count: indexPath.row + 1)
             return cell
@@ -156,13 +163,13 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     }
     
     @objc private func moreButtonDipTap(_ sender: UIButton) {
-        if sender.tag == 3 {
+        if sender.tag == 4 {
             loadMorePopularBooks()
-        } else if sender.tag == 4 {
+        } else if sender.tag == 6 {
             loadMoreLatestBooks()
         }
     }
-
+    
     // 헤더 및 푸터 설정
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
@@ -183,7 +190,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
                 baseHeader.configure(title: "오늘의 추천 도서")
             } else if indexPath.section == 3 {
                 baseHeader.configure(title: "지금 인기 있어요")
-            } else if indexPath.section == 4 {
+            } else if indexPath.section == 5 {
                 baseHeader.configure(title: "새로 나왔어요")
             }
             
@@ -192,5 +199,5 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             return UICollectionReusableView()
         }
     }
-
+    
 }
