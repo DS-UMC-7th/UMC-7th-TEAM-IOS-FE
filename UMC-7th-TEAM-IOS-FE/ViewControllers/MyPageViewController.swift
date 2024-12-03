@@ -19,7 +19,7 @@ class MyPageViewController: UIViewController {
         view = myPageView
         setDataSource()
         setAction()
-        print(bookData)
+        updateCenterBookInfo()
     }
     
     // MARK: - function
@@ -28,11 +28,20 @@ class MyPageViewController: UIViewController {
         myPageView.reviewTableView.dataSource = self
         myPageView.reviewTableView.delegate = self
         myPageView.bookSlideCollectionView.dataSource = self
+        myPageView.bookSlideCollectionView.delegate = self
     }
     
     private func setAction() {
         myPageView.filterButton.addTarget(self, action: #selector(filterButtonTapped(_ :)), for: .touchUpInside)
         myPageView.moreButton.addTarget(self, action: #selector(moreButtonTapped(_:)), for: .touchUpInside)
+    }
+    
+    private func updateCenterBookInfo() {
+        // 초기 중앙 셀 데이터 가져오기
+        let initialIndex = 0
+        let book = bookData[initialIndex]
+        myPageView.bookSlideTitleLabel.text = book.bookTitle
+        myPageView.bookSlideInfoLabel.text = book.bookInfo
     }
     
     // MARK: - action
@@ -72,7 +81,7 @@ class MyPageViewController: UIViewController {
     
 }
 
-extension MyPageViewController: UICollectionViewDataSource {
+extension MyPageViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView === myPageView.menuCollectionView {
             return menuData.count
@@ -107,6 +116,36 @@ extension MyPageViewController: UICollectionViewDataSource {
         return UICollectionViewCell()
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard let layout = myPageView.bookSlideCollectionView.collectionViewLayout as? UICollectionViewFlowLayout else { return }
+        
+        let centerX = scrollView.contentOffset.x + myPageView.bookSlideCollectionView.frame.size.width / 2
+        var currentCenterIndexPath: IndexPath? = nil
+        
+        for cell in myPageView.bookSlideCollectionView.visibleCells {
+            guard let indexPath = myPageView.bookSlideCollectionView.indexPath(for: cell),
+                  let attributes = myPageView.bookSlideCollectionView.layoutAttributesForItem(at: indexPath) else { continue }
+            
+            let cellCenterX = attributes.frame.midX
+            
+            // 중앙에 있는 셀인지 확인
+            if abs(cellCenterX - centerX) < layout.itemSize.width / 2 {
+                currentCenterIndexPath = indexPath
+                break // 중앙 셀을 찾았으므로 루프 종료
+            }
+        }
+        
+        // 중앙 셀에 해당하는 제목과 정보 업데이트
+        if let indexPath = currentCenterIndexPath {
+            let book = bookData[indexPath.row]
+            myPageView.bookSlideTitleLabel.text = book.bookTitle
+            myPageView.bookSlideInfoLabel.text = book.bookInfo
+        } else {
+            // 중앙 셀이 없을 경우 제목/정보 초기화
+            myPageView.bookSlideTitleLabel.text = ""
+            myPageView.bookSlideInfoLabel.text = ""
+        }
+    }
     
 }
 

@@ -186,7 +186,15 @@ class MyPageView: UIView {
         $0.register(MyPageBookCollectionViewCell.self, forCellWithReuseIdentifier: MyPageBookCollectionViewCell.identifier)
     }
     
+    public let bookSlideTitleLabel = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Bold", size: 18)
+        $0.textColor = .black
+    }
     
+    public let bookSlideInfoLabel = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Regular", size: 12)
+        $0.textColor = UIColor(red: 119/255, green: 119/255, blue: 119/255, alpha: 1)
+    }
     
     // 리뷰 작성
     
@@ -289,7 +297,9 @@ class MyPageView: UIView {
             reviewTableView,
             moreButton,
             bookLabelBackground, bookLabel,
-            bookSlideCollectionView
+            bookSlideCollectionView,
+            bookSlideTitleLabel,
+            bookSlideInfoLabel
         ].forEach {
             contentView.addSubview($0)
         }
@@ -342,6 +352,18 @@ class MyPageView: UIView {
             $0.top.equalTo(bookLabelBackground.snp.bottom).offset(9)
             $0.horizontalEdges.equalToSuperview().inset(20)
             $0.height.equalTo(200)
+        }
+        
+        bookSlideTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(bookSlideCollectionView.snp.bottom).offset(5)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(21)
+        }
+        
+        bookSlideInfoLabel.snp.makeConstraints {
+            $0.top.equalTo(bookSlideTitleLabel.snp.bottom).offset(4)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(14)
             $0.bottom.equalTo(scrollView.snp.bottom).offset(-16)
         }
     }
