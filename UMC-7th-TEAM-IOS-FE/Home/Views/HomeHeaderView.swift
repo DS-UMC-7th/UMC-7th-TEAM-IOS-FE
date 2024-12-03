@@ -51,6 +51,7 @@ class HomeHeaderView: UIView {
             $0.leading.equalToSuperview().offset(16)
             $0.width.equalTo(104)
             $0.height.equalTo(24)
+            $0.bottom.equalToSuperview()
         }
         
         notificationButton.snp.makeConstraints {

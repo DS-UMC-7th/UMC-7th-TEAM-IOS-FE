@@ -48,25 +48,17 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        print("Item at index \(indexPath.row) frame: \(cell.frame)")
-    }
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 4
+        return 5
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
-        case 0: // 검색 섹션
-            return 1
-        case 1: // 배너 섹션
-            return HomeCellModel.bannerData.count
-        case 2: // 추천 섹션
-            print("Recommended books count: \(recommendedBooks.count)")
-            return recommendedBooks.count
-        case 3:
-            return HomeCellModel.bestSellerData.count
+        case 0: return 1
+        case 1: return HomeCellModel.bannerData.count
+        case 2: return recommendedBooks.count
+        case 3: return HomeCellModel.bestSellerData.count
+        case 4: return HomeCellModel.bestSellerData.count
         default:
             return 0
         }
@@ -89,9 +81,19 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             cell.configure(with: recommendedBooks[indexPath.row], isCentered: isCentered)
             return cell
         case 3:
+//            if indexPath.row == 0 {
+//                // 필터 아이템
+//                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCell.identifier, for: indexPath) as! FilterCell
+//                return cell
+//            } else {
+//                // 책 아이템
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BestSellerCell.identifier, for: indexPath) as! BestSellerCell
-            let data = HomeCellModel.bestSellerData[indexPath.row]
-            cell.configure(model: data, count: indexPath.row + 1)
+            cell.configure(model: HomeCellModel.bestSellerData[indexPath.row], count: indexPath.row + 1)
+            return cell
+//            }
+        case 4:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewBookCell.identifier, for: indexPath) as! NewBookCell
+            cell.configure(model: HomeCellModel.bestSellerData[indexPath.row], count: indexPath.row + 1)
             return cell
         default:
             return UICollectionViewCell()
@@ -101,21 +103,29 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
     // 헤더 설정
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         switch kind {
+        case UICollectionView.elementKindSectionFooter:
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: MoreButtonFooter.identifier, for: indexPath) as! MoreButtonFooter
+            return footer
         case UICollectionView.elementKindSectionHeader:
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: BaseCellHeader.identifier, for: indexPath) as! BaseCellHeader
+            let baseHeader = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: BaseCellHeader.identifier,
+                for: indexPath
+            ) as! BaseCellHeader
             
+            // 섹션별 타이틀 설정
             if indexPath.section == 2 {
-                header.configure(title: "오늘의 추천 도서")
+                baseHeader.configure(title: "오늘의 추천 도서")
             } else if indexPath.section == 3 {
-                header.configure(title: "지금 인기 있어요")
+                baseHeader.configure(title: "지금 인기 있어요")
+            } else if indexPath.section == 4 {
+                baseHeader.configure(title: "새로 나왔어요")
             }
-            
-            return header
+            return baseHeader
         default:
             return UICollectionReusableView()
         }
     }
-    
 }
 
 extension HomeViewController: UIScrollViewDelegate {

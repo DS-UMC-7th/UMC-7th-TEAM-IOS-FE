@@ -35,10 +35,15 @@ class HomeView: UIView {
         collectionView.register(AdBannerCell.self, forCellWithReuseIdentifier: AdBannerCell.identifier)
         collectionView.register(RecommendationCell.self, forCellWithReuseIdentifier: RecommendationCell.identifier)
         collectionView.register(BestSellerCell.self, forCellWithReuseIdentifier: BestSellerCell.identifier)
+        collectionView.register(NewBookCell.self, forCellWithReuseIdentifier: NewBookCell.identifier)
+//        collectionView.register(FilterCell.self, forCellWithReuseIdentifier: FilterCell.identifier)
         
         /* 헤더 등록 */
         collectionView.register(BaseCellHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: BaseCellHeader.identifier)
-
+        
+        /* 푸터 등록 */
+        collectionView.register(MoreButtonFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: MoreButtonFooter.identifier)
+        
         return collectionView
     }()
     
@@ -52,8 +57,9 @@ class HomeView: UIView {
     
     private func constraints() {
         homeHeaderView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(64)
+            $0.top.equalTo(safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(50)
         }
         
         homeCollectionView.snp.makeConstraints {

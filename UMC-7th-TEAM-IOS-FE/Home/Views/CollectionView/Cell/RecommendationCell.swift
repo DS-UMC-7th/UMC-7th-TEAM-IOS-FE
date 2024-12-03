@@ -53,7 +53,7 @@ class RecommendationCell: UICollectionViewCell {
     
     private func constraints() {
         bookImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(24)
+            $0.top.equalToSuperview()
             $0.centerX.equalTo(contentView)
             $0.height.lessThanOrEqualTo(contentView.snp.height).multipliedBy(0.6)
         }
