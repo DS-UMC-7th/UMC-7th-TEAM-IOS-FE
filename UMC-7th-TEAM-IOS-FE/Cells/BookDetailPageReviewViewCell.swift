@@ -54,6 +54,10 @@ class BookDetailPageReviewViewCell: UITableViewCell {
         $0.alignment = .center
     }
     
+    private let separatorView = UIView().then {
+        $0.backgroundColor = UIColor(red: 227/255, green: 241/255, blue: 255/255, alpha: 1)
+    }
+    
     // MARK: - function
     private func setupView() {
         contentView.addSubview(reviewerImageView)
@@ -62,6 +66,7 @@ class BookDetailPageReviewViewCell: UITableViewCell {
         contentView.addSubview(reviewDateLabel)
         contentView.addSubview(reviewTextLabel)
         contentView.addSubview(tagStackView)
+        contentView.addSubview(separatorView)
         
         reviewerImageView.snp.makeConstraints {
             $0.top.left.equalToSuperview().inset(16)
@@ -92,6 +97,13 @@ class BookDetailPageReviewViewCell: UITableViewCell {
             $0.top.equalTo(reviewTextLabel.snp.bottom).offset(12)
             $0.left.right.equalToSuperview().inset(16)
             $0.bottom.equalToSuperview().offset(-16)
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(16)
+            $0.right.equalToSuperview().offset(-16)
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
     
