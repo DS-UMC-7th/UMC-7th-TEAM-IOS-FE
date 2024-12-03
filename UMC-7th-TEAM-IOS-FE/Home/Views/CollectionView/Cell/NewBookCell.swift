@@ -145,7 +145,7 @@ class NewBookCell: UICollectionViewCell {
         }
     }
     
-    func configure(model: BookModel, count: Int) {
+    func configure(with model: BookModel, count: Int) {
         countLabel.text = "\(count)"
         
         if let url = URL(string: model.imgUrl) {
@@ -155,5 +155,7 @@ class NewBookCell: UICollectionViewCell {
         titleLabel.text = model.title
         authorLabel.text = "\(model.author) · \(model.publisher)"
         descriptionLabel.text = model.description
+        reviewCountLabel.text = "\(model.reviewCount)"
+        ratingLabel.text = model.rating != nil ? "\(model.rating!)/5.0" : "0/5.0"
     }
 }

@@ -11,6 +11,7 @@ class HomeViewController: UIViewController {
     
     private lazy var recommendedBooks: [BookModel] = []
     private lazy var popularBooks: [BookModel] = []
+    private lazy var latestBooks: [BookModel] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,21 +30,37 @@ class HomeViewController: UIViewController {
     private func fetchBooks() {
         let group = DispatchGroup()
         
+        group.enter()
         HomeService.shared.fetchBooks(sortedBy: "highest", page: 0, size: 3) { [weak self] result in
+            defer { group.leave() }
             switch result {
             case .success(let books):
-//                print("Books fetched: \(books)")
+                print("추천 도서 연결 성공")
                 self?.recommendedBooks = books
             case .failure(let error):
                 print("Error fetching books: \(error.localizedDescription)")
             }
         }
     
+        group.enter()
         HomeService.shared.fetchBooks(sortedBy: "popular", page: 0, size: 3) { [weak self] result in
+            defer { group.leave() }
             switch result {
             case .success(let books):
-                print("Books fetched: \(books)")
+                print("인기 도서 연결 성공")
                 self?.popularBooks = books
+            case .failure(let error):
+                print("Error fetching books: \(error.localizedDescription)")
+            }
+        }
+        
+        group.enter()
+        HomeService.shared.fetchBooks(sortedBy: "latest", page: 0, size: 3) { [weak self] result in
+            defer { group.leave() }
+            switch result {
+            case .success(let books):
+                print("최근 도서 연결 성공")
+                self?.latestBooks = books
             case .failure(let error):
                 print("Error fetching books: \(error.localizedDescription)")
             }
@@ -74,7 +91,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
         case 1: return HomeCellModel.bannerData.count
         case 2: return recommendedBooks.count
         case 3: return popularBooks.count
-        case 4: return HomeCellModel.bestSellerData.count
+        case 4: return latestBooks.count
         default:
             return 0
         }
@@ -109,7 +126,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
 //            }
         case 4:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewBookCell.identifier, for: indexPath) as! NewBookCell
-            cell.configure(model: HomeCellModel.bestSellerData[indexPath.row], count: indexPath.row + 1)
+            cell.configure(with: latestBooks[indexPath.row], count: indexPath.row + 1)
             return cell
         default:
             return UICollectionViewCell()
