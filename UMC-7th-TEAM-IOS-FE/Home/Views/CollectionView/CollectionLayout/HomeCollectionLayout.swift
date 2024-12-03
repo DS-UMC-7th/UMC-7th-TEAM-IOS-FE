@@ -56,38 +56,6 @@ class HomeCollectionLayout {
         return section
     }
     
-    // 추천 섹션 생성
-//    private static func createRecommendationSection() -> NSCollectionLayoutSection {
-//        let itemSize = NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(1.0 / 3.0), heightDimension: .fractionalHeight(1.0))
-//        let item = NSCollectionLayoutItem(layoutSize: itemSize)
-//
-//        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(260))
-//        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
-////        group.interItemSpacing = .fixed(20)
-//        
-//        let section = NSCollectionLayoutSection(group: group)
-//        section.orthogonalScrollingBehavior = .groupPagingCentered
-////        section.orthogonalScrollingBehavior = .paging
-//        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 20, bottom: 20, trailing: 20)
-//
-//        // 아이템 크기 조정 핸들러
-//        section.visibleItemsInvalidationHandler = { (visibleItems, contentOffset, environment) in
-//            let centerX = contentOffset.x + environment.container.contentSize.width / 2
-//
-//            for item in visibleItems {
-//                // 각 아이템의 중심점
-//                let distanceFromCenter = abs(centerX - item.frame.midX)
-//                let scale = max(0.85, 1 - (distanceFromCenter / environment.container.contentSize.width))
-//                item.transform = CGAffineTransform(scaleX: scale, y: scale)
-//            }
-//        }
-//        
-//        section.boundarySupplementaryItems = [createHeaderItem()]
-//        
-//        return section
-//    }
-    
     private static func createRecommendationSection() -> NSCollectionLayoutSection {
         // 아이템 크기 설정
         let itemSize = NSCollectionLayoutSize(
@@ -108,7 +76,7 @@ class HomeCollectionLayout {
         // 섹션 설정
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .groupPagingCentered
-        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 20, bottom: 20, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 70, leading: 20, bottom: 0, trailing: 20)
 
         section.boundarySupplementaryItems = [createHeaderItem()]
         
@@ -146,7 +114,7 @@ class HomeCollectionLayout {
 
         // 섹션 설정
         let section = NSCollectionLayoutSection(group: bookGroup)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 20, bottom: 20, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 70, leading: 20, bottom: 20, trailing: 20)
         section.interGroupSpacing = 26
 
         // 헤더와 푸터 추가
@@ -170,7 +138,7 @@ class HomeCollectionLayout {
 
         // 섹션 설정
         let section = NSCollectionLayoutSection(group: bookGroup)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 60, leading: 20, bottom: 20, trailing: 20)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 70, leading: 20, bottom: 20, trailing: 20)
         section.interGroupSpacing = 26
 
         // 헤더와 푸터 추가
