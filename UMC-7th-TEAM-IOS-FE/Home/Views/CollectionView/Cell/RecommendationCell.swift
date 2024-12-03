@@ -27,6 +27,16 @@ class RecommendationCell: UICollectionViewCell {
         $0.clipsToBounds = true
     }
     
+    private let countView = UIView().then {
+        $0.backgroundColor = UIColor(red: 33/255, green: 55/255, blue: 86/255, alpha: 1.0)
+        $0.layer.cornerRadius = 10
+    }
+    
+    private lazy var countLabel = UILabel().then {
+        $0.font = UIFont(name: "Pretendard-Bold", size: 12)
+        $0.textColor = .white
+    }
+    
     private let titleLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Bold", size: 18)
         $0.textColor = .black
@@ -42,7 +52,7 @@ class RecommendationCell: UICollectionViewCell {
     
     private let authorLabel = UILabel().then {
         $0.font = UIFont(name: "Pretendard-Light", size: 12)
-        $0.textColor = .gray
+        $0.textColor = .darkGray
         $0.textAlignment = .center
     }
     
@@ -51,6 +61,9 @@ class RecommendationCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(authorLabel)
+        contentView.addSubview(countView)
+        contentView.addSubview(countLabel)
+        
     }
     
     private func constraints() {
@@ -60,8 +73,20 @@ class RecommendationCell: UICollectionViewCell {
             $0.height.lessThanOrEqualTo(172)
         }
         
-        descriptionLabel.snp.makeConstraints {
+        countView.snp.makeConstraints {
             $0.top.equalTo(bookImageView.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(45)
+            $0.height.equalTo(20)
+        }
+        
+        countLabel.snp.makeConstraints {
+            $0.centerX.equalTo(countView)
+            $0.centerY.equalTo(countView)
+        }
+        
+        descriptionLabel.snp.makeConstraints {
+            $0.top.equalTo(countView.snp.bottom).offset(20)
             $0.centerX.equalToSuperview()
         }
         
@@ -77,11 +102,12 @@ class RecommendationCell: UICollectionViewCell {
         }
     }
     
-    func configure(with model: BookModel) {
+    func configure(with model: BookModel, count: Int) {
         if let url = URL(string: model.imgUrl) {
             bookImageView.kf.setImage(with: url, placeholder: UIImage(named: "home_book_sample"))
         }
         
+        countLabel.text = "\(count)/3"
         titleLabel.text = model.title
         authorLabel.text = "\(model.author) | \(model.publisher)"
         descriptionLabel.text = model.description

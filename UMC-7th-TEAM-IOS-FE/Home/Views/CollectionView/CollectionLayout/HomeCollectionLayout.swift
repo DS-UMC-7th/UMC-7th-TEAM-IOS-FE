@@ -67,13 +67,13 @@ class HomeCollectionLayout {
         // 아이템 크기 설정
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(260)
+            heightDimension: .estimated(280)
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
 
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(260)
+            heightDimension: .estimated(280)
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,

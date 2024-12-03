@@ -141,7 +141,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout, UICollectionVi
             return cell
         case 2:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecommendationCell.identifier, for: indexPath) as! RecommendationCell
-            cell.configure(with: recommendedBooks[indexPath.row])
+            cell.configure(with: recommendedBooks[indexPath.row], count: indexPath.row + 1)
             return cell
         case 3:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCell.identifier, for: indexPath) as! FilterCell

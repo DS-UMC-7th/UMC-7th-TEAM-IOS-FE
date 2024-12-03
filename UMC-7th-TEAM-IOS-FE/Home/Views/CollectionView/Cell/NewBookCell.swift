@@ -44,7 +44,7 @@ class NewBookCell: UICollectionViewCell {
     private let authorLabel = UILabel().then {
         $0.text = "한강 · 문학동네"
         $0.font = UIFont(name: "Pretendard-Light", size: 12)
-        $0.textColor = .gray
+        $0.textColor = .darkGray
         $0.numberOfLines = 1
     }
     
