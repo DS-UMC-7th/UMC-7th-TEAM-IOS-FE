@@ -25,7 +25,7 @@ class MoreButtonFooter: UICollectionReusableView {
         $0.setTitle("더보기", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont(name: "Pretendard-SemiBold", size: 15)
-        $0.backgroundColor = .black
+        $0.backgroundColor = UIColor(red: 33/255, green: 55/255, blue: 86/255, alpha: 1.0)
         $0.layer.cornerRadius = 24
     }
     
