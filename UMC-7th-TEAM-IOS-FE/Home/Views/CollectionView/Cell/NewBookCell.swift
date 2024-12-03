@@ -78,6 +78,8 @@ class NewBookCell: UICollectionViewCell {
         $0.textColor = UIColor(red: 69/255, green: 100/255, blue: 140/255, alpha: 1.0)
     }
     
+    private let separator = itemSeparatorCell()
+    
     private func addComponents() {
         contentView.addSubview(countLabel)
         contentView.addSubview(bookImageView)
@@ -88,6 +90,7 @@ class NewBookCell: UICollectionViewCell {
         contentView.addSubview(reviewCountImageView)
         contentView.addSubview(reviewCountLabel)
         contentView.addSubview(descriptionLabel)
+        contentView.addSubview(separator)
     }
     
     private func constraints() {
@@ -97,7 +100,7 @@ class NewBookCell: UICollectionViewCell {
         }
         
         bookImageView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
+            $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(20)
             $0.height.equalTo(124)
             $0.width.equalTo(bookImageView.snp.height).multipliedBy(3.0 / 4.0)
@@ -142,6 +145,12 @@ class NewBookCell: UICollectionViewCell {
             $0.leading.equalTo(titleLabel.snp.leading)
             $0.trailing.equalToSuperview()
             $0.bottom.equalTo(bookImageView.snp.bottom)
+        }
+        
+        separator.snp.makeConstraints {
+            $0.top.equalTo(bookImageView.snp.bottom).offset(26)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
     }
     

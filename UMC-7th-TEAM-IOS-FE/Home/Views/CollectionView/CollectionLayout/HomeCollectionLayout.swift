@@ -10,7 +10,7 @@ import UIKit
 class HomeCollectionLayout {
 
     static func createCompositionalLayout() -> UICollectionViewCompositionalLayout {
-        return UICollectionViewCompositionalLayout { (section, _) -> NSCollectionLayoutSection? in
+        let layout = UICollectionViewCompositionalLayout { (section, _) -> NSCollectionLayoutSection? in
             switch section {
             case 0: // 검색 섹션
                 return createSearchBarSection()
@@ -26,6 +26,9 @@ class HomeCollectionLayout {
                 return nil
             }
         }
+
+        return layout
+
     }
     
     // 검색 섹션
@@ -85,18 +88,11 @@ class HomeCollectionLayout {
     
     // 인기 섹션 생성
     private static func createBestSellerSection() -> NSCollectionLayoutSection {
-        // 필터 아이템
-//        let filterItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(40))
-//        let filterItem = NSCollectionLayoutItem(layoutSize: filterItemSize)
-//        
-//        let filterGroupSize = NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(1.0),
-//            heightDimension: .absolute(40)
-//        )
-//        let filterGroup = NSCollectionLayoutGroup.vertical(layoutSize: filterGroupSize, subitems: [filterItem])
-        
         // 도서 아이템
-        let bookItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(130))
+        let bookItemSize = NSCollectionLayoutSize(
+            widthDimension: .fractionalWidth(1.0),
+            heightDimension: .absolute(130)
+        )
         let bookItem = NSCollectionLayoutItem(layoutSize: bookItemSize)
 
         let bookGroupSize = NSCollectionLayoutSize(
@@ -104,13 +100,6 @@ class HomeCollectionLayout {
             heightDimension: .estimated(160)
         )
         let bookGroup = NSCollectionLayoutGroup.vertical(layoutSize: bookGroupSize, subitems: [bookItem])
-
-        // 전체 그룹 (필터 + 도서 그룹)
-//        let overallGroupSize = NSCollectionLayoutSize(
-//            widthDimension: .fractionalWidth(1.0),
-//            heightDimension: .estimated(300) // 필터 높이 + 예상 도서 그룹 높이
-//        )
-//        let overallGroup = NSCollectionLayoutGroup.vertical(layoutSize: overallGroupSize, subitems: [filterGroup, bookGroup])
 
         // 섹션 설정
         let section = NSCollectionLayoutSection(group: bookGroup)
