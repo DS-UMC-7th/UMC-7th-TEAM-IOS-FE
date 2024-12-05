@@ -11,10 +11,10 @@ import Moya
 class MyPageViewController: UIViewController {
     private let myPageView = MyPageView()
     private let menuData = MyPageMenuModel.dummy()
-    private let bookData = MyPageBookModel.dummy()
     private var isExpanded = false
     private var visibleReviewCount = 3
     private let provider = MoyaProvider<MyPageTargetType>()
+    private var bookList: [Book] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +23,7 @@ class MyPageViewController: UIViewController {
         setAction()
         updateCenterBookInfo()
         getUserInfo()
+        getBookList()
     }
     
     // MARK: - function
@@ -41,10 +42,15 @@ class MyPageViewController: UIViewController {
     
     private func updateCenterBookInfo() {
         // 초기 중앙 셀 데이터 가져오기
+        guard !bookList.isEmpty else {
+            myPageView.bookSlideTitleLabel.text = ""
+            myPageView.bookSlideInfoLabel.text = ""
+            return
+        }
         let initialIndex = 0
-        let book = bookData[initialIndex]
-        myPageView.bookSlideTitleLabel.text = book.bookTitle
-        myPageView.bookSlideInfoLabel.text = book.bookInfo
+        let book = bookList[initialIndex]
+        myPageView.bookSlideTitleLabel.text = book.title
+        myPageView.bookSlideInfoLabel.text = "\(book.author) 저 / \(book.publisher)"
     }
     
     private func getUserInfo() {
@@ -57,6 +63,25 @@ class MyPageViewController: UIViewController {
                     self.myPageView.nameLabel.text = userResponse.userName
                     self.myPageView.emailLabel.text = userResponse.email
                     
+                } catch {
+                    print("Mapping error: \(error.localizedDescription)")
+                }
+            case .failure(let error):
+                print("Network request error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func getBookList() {
+        provider.request(.getBookList(sortedBy: "highest", page: 0, size: 7)) { result in
+            switch result {
+            case .success(let response):
+                do {
+                    let bookResponse = try response.map(MyPageBookResponseModel.self)
+                    self.bookList = bookResponse.result.books
+                    DispatchQueue.main.async {
+                        self.myPageView.bookSlideCollectionView.reloadData()
+                    }
                 } catch {
                     print("Mapping error: \(error.localizedDescription)")
                 }
@@ -110,7 +135,7 @@ extension MyPageViewController: UICollectionViewDataSource, UICollectionViewDele
             return menuData.count
         }
         else if collectionView === myPageView.bookSlideCollectionView {
-            return bookData.count
+            return bookList.count
         }
         return 0
     }
@@ -131,8 +156,17 @@ extension MyPageViewController: UICollectionViewDataSource, UICollectionViewDele
                 return UICollectionViewCell()
             }
             
-            let list = bookData[indexPath.row]
-            cell.bookImage.image = list.bookImage
+            let book = bookList[indexPath.row]
+            // 이미지 비동기 로드
+            if let url = URL(string: book.imgUrl) {
+                DispatchQueue.global().async {
+                    if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                        DispatchQueue.main.async {
+                            cell.bookImage.image = image
+                        }
+                    }
+                }
+            }
             return cell
         }
         
@@ -160,9 +194,9 @@ extension MyPageViewController: UICollectionViewDataSource, UICollectionViewDele
         
         // 중앙 셀에 해당하는 제목과 정보 업데이트
         if let indexPath = currentCenterIndexPath {
-            let book = bookData[indexPath.row]
-            myPageView.bookSlideTitleLabel.text = book.bookTitle
-            myPageView.bookSlideInfoLabel.text = book.bookInfo
+            let book = bookList[indexPath.row]
+            myPageView.bookSlideTitleLabel.text = book.title
+            myPageView.bookSlideInfoLabel.text = "\(book.author) 저 / \(book.publisher)"
         } else {
             // 중앙 셀이 없을 경우 제목/정보 초기화
             myPageView.bookSlideTitleLabel.text = ""

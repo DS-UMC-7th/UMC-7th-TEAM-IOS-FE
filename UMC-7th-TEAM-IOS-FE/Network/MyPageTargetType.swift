@@ -10,6 +10,7 @@ import Moya
 
 enum MyPageTargetType {
     case getUserInfo(userId: String)
+    case getBookList(sortedBy: String, page: Int, size: Int)
 }
 
 extension MyPageTargetType: TargetType {
@@ -25,12 +26,16 @@ extension MyPageTargetType: TargetType {
         switch self {
         case .getUserInfo:
             return "/auth/mypage"
+        case .getBookList:
+            return "/books"
         }
     }
     
     var method: Moya.Method {
         switch self {
         case .getUserInfo:
+            return .get
+        case .getBookList:
             return .get
         }
     }
@@ -39,12 +44,16 @@ extension MyPageTargetType: TargetType {
         switch self {
         case .getUserInfo(let userId):
             return .requestParameters(parameters: ["userId": userId], encoding: URLEncoding.queryString)
+        case .getBookList(let sortedBy, let page, let size):
+            return .requestParameters(parameters: ["sortedBy": sortedBy, "page": page, "size": size], encoding: URLEncoding.queryString)
         }
     }
     
     var headers: [String : String]? {
         switch self {
         case .getUserInfo:
+            return ["Content-Type" : "application/json"]
+        case .getBookList:
             return ["Content-Type" : "application/json"]
         }
     }
