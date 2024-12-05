@@ -95,7 +95,7 @@ class HomeViewController: UIViewController {
             case .success(let newBooks):
                 self?.latestBooks.append(contentsOf: newBooks)
                 DispatchQueue.main.async {
-                    self?.homeView.homeCollectionView.reloadSections(IndexSet(integer: 5))
+                    self?.homeView.homeCollectionView.reloadSections(IndexSet(integer: 6))
                 }
             case .failure(let error):
                 print("Error fetching more latest books: \(error.localizedDescription)")
