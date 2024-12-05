@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		231FCC102CFA348B000483A0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 231FCC0F2CFA348B000483A0 /* SnapKit */; };
 		231FCC132CFA3495000483A0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 231FCC122CFA3495000483A0 /* Then */; };
+		233068F92CFF227400BD5C77 /* ToosieSlide in Frameworks */ = {isa = PBXBuildFile; productRef = 233068F82CFF227400BD5C77 /* ToosieSlide */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			files = (
 				231FCC102CFA348B000483A0 /* SnapKit in Frameworks */,
 				231FCC132CFA3495000483A0 /* Then in Frameworks */,
+				233068F92CFF227400BD5C77 /* ToosieSlide in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				231FCC0F2CFA348B000483A0 /* SnapKit */,
 				231FCC122CFA3495000483A0 /* Then */,
+				233068F82CFF227400BD5C77 /* ToosieSlide */,
 			);
 			productName = "UMC-7th-TEAM-IOS-FE";
 			productReference = 18CB3B592CF8120600F9B499 /* UMC-7th-TEAM-IOS-FE.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				231FCC0E2CFA348B000483A0 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				231FCC112CFA3495000483A0 /* XCRemoteSwiftPackageReference "Then" */,
+				233068F72CFF227400BD5C77 /* XCRemoteSwiftPackageReference "ToosieSlide" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 18CB3B5A2CF8120600F9B499 /* Products */;
@@ -362,6 +366,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		233068F72CFF227400BD5C77 /* XCRemoteSwiftPackageReference "ToosieSlide" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/TheInkedEngineer/ToosieSlide.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -374,6 +386,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 231FCC112CFA3495000483A0 /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
+		};
+		233068F82CFF227400BD5C77 /* ToosieSlide */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 233068F72CFF227400BD5C77 /* XCRemoteSwiftPackageReference "ToosieSlide" */;
+			productName = ToosieSlide;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
