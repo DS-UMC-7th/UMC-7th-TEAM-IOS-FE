@@ -72,20 +72,24 @@ class MyPageView: UIView {
         $0.layer.cornerRadius = 10
     }
     
-    private let nameLabel = UILabel().then {
-        let partLabel = UILabel()
-        partLabel.text = "책책책참새 님"
-        
-        let attributedString = NSMutableAttributedString(string: partLabel.text ?? "")
-        attributedString.addAttribute(.font, value: UIFont(name: "Pretendard-Bold", size: 17) ?? .systemFont(ofSize: 17), range: (partLabel.text! as NSString).range(of: "책책책참새"))
-        attributedString.addAttribute(.font, value: UIFont(name: "Pretendard-Bold", size: 15) ?? .systemFont(ofSize: 15), range: (partLabel.text! as NSString).range(of: " 님"))
-        
-        $0.attributedText = attributedString
+    public let nameLabel = UILabel().then {
+        $0.text = "책책책참새"
+        $0.font = UIFont(name: "Pretendard-Bold", size: 17)
         $0.textColor = .white
     }
     
+    private let subNameLabel = UILabel().then {
+        $0.text = " 님"
+        $0.font = UIFont(name: "Pretendard-Bold", size: 15)
+        $0.textColor = .white
+    }
     
-    private let emailLabel = UILabel().then {
+    private let nameStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.alignment = .trailing
+    }
+    
+    public let emailLabel = UILabel().then {
         $0.text = "ks18mskd9@naver.com"
         $0.font = UIFont(name: "Pretendard-Medium", size: 15)
         $0.textColor = .black
@@ -210,6 +214,7 @@ class MyPageView: UIView {
     private func makeStackView() {
         [logoImage, logoTitle].forEach { logoStackView.addArrangedSubview($0) }
         [alertButton, menuButton].forEach { menuStackView.addArrangedSubview($0) }
+        [nameLabel, subNameLabel].forEach { nameStackView.addArrangedSubview($0) }
         [nameBackground, emailLabel].forEach { infoStackView.addArrangedSubview($0) }
     }
     
@@ -220,7 +225,7 @@ class MyPageView: UIView {
             menuStackView,
             profileImage,
             infoStackView,
-            nameLabel,
+            nameStackView,
             menuBackground,
             menuCollectionView,
             scrollView
@@ -255,11 +260,12 @@ class MyPageView: UIView {
         }
         
         nameBackground.snp.makeConstraints {
-            $0.width.equalTo(108)
+            $0.left.equalTo(nameStackView.snp.left).offset(-8)
+            $0.right.equalTo(nameStackView.snp.right).offset(8)
             $0.height.equalTo(32)
         }
         
-        nameLabel.snp.makeConstraints {
+        nameStackView.snp.makeConstraints {
             $0.top.equalTo(infoStackView.snp.top).offset(5)
             $0.left.equalTo(infoStackView.snp.left).offset(9)
         }
