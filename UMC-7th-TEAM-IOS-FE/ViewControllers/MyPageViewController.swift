@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Moya
 
 class MyPageViewController: UIViewController {
     private let myPageView = MyPageView()
@@ -13,6 +14,7 @@ class MyPageViewController: UIViewController {
     private let bookData = MyPageBookModel.dummy()
     private var isExpanded = false
     private var visibleReviewCount = 3
+    private let provider = MoyaProvider<MyPageTargetType>()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +22,7 @@ class MyPageViewController: UIViewController {
         setDataSource()
         setAction()
         updateCenterBookInfo()
+        getUserInfo()
     }
     
     // MARK: - function
@@ -42,6 +45,25 @@ class MyPageViewController: UIViewController {
         let book = bookData[initialIndex]
         myPageView.bookSlideTitleLabel.text = book.bookTitle
         myPageView.bookSlideInfoLabel.text = book.bookInfo
+    }
+    
+    private func getUserInfo() {
+        provider.request(.getUserInfo(userId: "1")) { result in
+            switch result {
+            case .success(let response):
+                do {
+                    let userResponse = try response.map(MyPageUserResponseModel.self)
+                    print("Successfully mapped response: \(userResponse)")
+                    self.myPageView.nameLabel.text = userResponse.userName
+                    self.myPageView.emailLabel.text = userResponse.email
+                    
+                } catch {
+                    print("Mapping error: \(error.localizedDescription)")
+                }
+            case .failure(let error):
+                print("Network request error: \(error.localizedDescription)")
+            }
+        }
     }
     
     // MARK: - action
@@ -81,6 +103,7 @@ class MyPageViewController: UIViewController {
     
 }
 
+// MARK: - extension
 extension MyPageViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView === myPageView.menuCollectionView {

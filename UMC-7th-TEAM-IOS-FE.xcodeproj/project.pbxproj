@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		231FCC102CFA348B000483A0 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 231FCC0F2CFA348B000483A0 /* SnapKit */; };
 		231FCC132CFA3495000483A0 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 231FCC122CFA3495000483A0 /* Then */; };
+		2330696A2D0226CF00BD5C77 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 233069692D0226CF00BD5C77 /* CombineMoya */; };
+		2330696C2D0226CF00BD5C77 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = 2330696B2D0226CF00BD5C77 /* Moya */; };
+		2330696E2D0226CF00BD5C77 /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2330696D2D0226CF00BD5C77 /* ReactiveMoya */; };
+		233069702D0226CF00BD5C77 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = 2330696F2D0226CF00BD5C77 /* RxMoya */; };
 		2C32CCF02D01C4920031DB98 /* ToosieSlide in Frameworks */ = {isa = PBXBuildFile; productRef = 2C32CCEF2D01C4920031DB98 /* ToosieSlide */; };
 		2CDE82B72CFDC5560074DD80 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 2CDE82B62CFDC5560074DD80 /* Alamofire */; };
 		2CDE82C02CFDC9E90074DD80 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2CDE82BF2CFDC9E90074DD80 /* Kingfisher */; };
@@ -46,8 +50,12 @@
 			files = (
 				2CDE82C02CFDC9E90074DD80 /* Kingfisher in Frameworks */,
 				2CDE82B72CFDC5560074DD80 /* Alamofire in Frameworks */,
+				2330696A2D0226CF00BD5C77 /* CombineMoya in Frameworks */,
 				2C32CCF02D01C4920031DB98 /* ToosieSlide in Frameworks */,
 				231FCC102CFA348B000483A0 /* SnapKit in Frameworks */,
+				2330696E2D0226CF00BD5C77 /* ReactiveMoya in Frameworks */,
+				233069702D0226CF00BD5C77 /* RxMoya in Frameworks */,
+				2330696C2D0226CF00BD5C77 /* Moya in Frameworks */,
 				231FCC132CFA3495000483A0 /* Then in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -96,6 +104,10 @@
 				2CDE82B62CFDC5560074DD80 /* Alamofire */,
 				2CDE82BF2CFDC9E90074DD80 /* Kingfisher */,
 				2C32CCEF2D01C4920031DB98 /* ToosieSlide */,
+				233069692D0226CF00BD5C77 /* CombineMoya */,
+				2330696B2D0226CF00BD5C77 /* Moya */,
+				2330696D2D0226CF00BD5C77 /* ReactiveMoya */,
+				2330696F2D0226CF00BD5C77 /* RxMoya */,
 			);
 			productName = "UMC-7th-TEAM-IOS-FE";
 			productReference = 18CB3B592CF8120600F9B499 /* UMC-7th-TEAM-IOS-FE.app */;
@@ -131,6 +143,7 @@
 				2CDE82B52CFDC5560074DD80 /* XCRemoteSwiftPackageReference "Alamofire" */,
 				2CDE82BE2CFDC9E90074DD80 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				2C32CCEE2D01C4920031DB98 /* XCRemoteSwiftPackageReference "ToosieSlide" */,
+				233069682D0226CF00BD5C77 /* XCRemoteSwiftPackageReference "Moya" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 18CB3B5A2CF8120600F9B499 /* Products */;
@@ -374,6 +387,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		233069682D0226CF00BD5C77 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
 		2C32CCEE2D01C4920031DB98 /* XCRemoteSwiftPackageReference "ToosieSlide" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/TheInkedEngineer/ToosieSlide";
@@ -410,6 +431,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 231FCC112CFA3495000483A0 /* XCRemoteSwiftPackageReference "Then" */;
 			productName = Then;
+		};
+		233069692D0226CF00BD5C77 /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 233069682D0226CF00BD5C77 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = CombineMoya;
+		};
+		2330696B2D0226CF00BD5C77 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 233069682D0226CF00BD5C77 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		2330696D2D0226CF00BD5C77 /* ReactiveMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 233069682D0226CF00BD5C77 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = ReactiveMoya;
+		};
+		2330696F2D0226CF00BD5C77 /* RxMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 233069682D0226CF00BD5C77 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = RxMoya;
 		};
 		2C32CCEF2D01C4920031DB98 /* ToosieSlide */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -89,7 +89,7 @@ class MyPageView: UIView {
         $0.alignment = .trailing
     }
     
-    private let emailLabel = UILabel().then {
+    public let emailLabel = UILabel().then {
         $0.text = "ks18mskd9@naver.com"
         $0.font = UIFont(name: "Pretendard-Medium", size: 15)
         $0.textColor = .black
