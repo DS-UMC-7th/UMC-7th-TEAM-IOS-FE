@@ -14,6 +14,7 @@ class MyPageViewController: UIViewController {
     private var isExpanded = false
     private var visibleReviewCount = 3
     private let provider = MoyaProvider<MyPageTargetType>()
+    private var reviewList: [MyPageReviewResponseModel] = []
     private var bookList: [Book] = []
     
     override func viewDidLoad() {
@@ -24,6 +25,7 @@ class MyPageViewController: UIViewController {
         updateCenterBookInfo()
         getUserInfo()
         getBookList()
+        getReview()
     }
     
     // MARK: - function
@@ -91,6 +93,54 @@ class MyPageViewController: UIViewController {
         }
     }
     
+    private func getReview() {
+        provider.request(.getReview(userId: "1")) { result in
+            switch result {
+            case .success(let response):
+                do {
+                    let reviewResponse = try response.map([MyPageReviewResponseModel].self)
+                    self.reviewList = reviewResponse
+                    DispatchQueue.main.async {
+                        self.myPageView.reviewTableView.reloadData()
+                    }
+                } catch {
+                    print("Mapping error: \(error.localizedDescription)")
+                }
+            case .failure(let error):
+                print("Network request error: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    private func formatCreateAt(_ isoDate: String) -> String {
+        let isoFormatter = ISO8601DateFormatter()
+        isoFormatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yy.MM.dd"
+
+        // 1단계: ISO 8601 형식 변환 시도
+        if let date = isoFormatter.date(from: isoDate) {
+            return dateFormatter.string(from: date)
+        }
+        
+        // 2단계: 마이크로초 제거 후 변환
+        let sanitizedDate = isoDate.components(separatedBy: ".").first ?? isoDate
+        let fallbackFormatter = DateFormatter()
+        fallbackFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+        fallbackFormatter.timeZone = TimeZone(identifier: "UTC")
+
+        if let date = fallbackFormatter.date(from: sanitizedDate) {
+            return dateFormatter.string(from: date)
+        }
+
+        print("날짜 변환 실패: \(isoDate)")
+        return isoDate
+    }
+
+
+
+    
     // MARK: - action
     @objc
     func filterButtonTapped(_ sender: UIButton) {
@@ -113,7 +163,7 @@ class MyPageViewController: UIViewController {
     @objc
     private func moreButtonTapped(_ sender: UIButton) {
         isExpanded.toggle()
-        visibleReviewCount = isExpanded ? 7 : 3
+        visibleReviewCount = isExpanded ? reviewList.count : 3
         myPageView.moreButton.setTitle(isExpanded ? "접기" : "더보기", for: .normal)
         
         UIView.animate(withDuration: 0) { [weak self] in
@@ -125,6 +175,7 @@ class MyPageViewController: UIViewController {
         }
         myPageView.reviewTableView.reloadData()
     }
+
     
 }
 
@@ -208,8 +259,7 @@ extension MyPageViewController: UICollectionViewDataSource, UICollectionViewDele
 
 extension MyPageViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let reviews = MyPageReviewModel.dummy()
-        return min(reviews.count, visibleReviewCount)
+        return min(reviewList.count, visibleReviewCount)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -217,13 +267,24 @@ extension MyPageViewController: UITableViewDelegate, UITableViewDataSource {
             return UITableViewCell()
         }
         
-        let list = MyPageReviewModel.dummy()[indexPath.row]
-        cell.bookImage.image = list.bookImage
-        cell.bookTitle.text = list.bookTitle
-        cell.bookInfo.text = list.bookInfo
-        cell.starLabel.text = list.starLabel
-        cell.reviewDateLabel.text = list.dateLabel
-        cell.reviewLabel.text = list.reviewLabel
+        let reviewData = reviewList[indexPath.row]
+        let bookData = reviewData.book
+        
+        if let url = URL(string: bookData.bookImg) {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url), let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        cell.bookImage.image = image
+                    }
+                }
+            }
+        }
+        cell.bookTitle.text = bookData.title
+        cell.bookInfo.text = "\(bookData.author) · \(bookData.publisher)"
+        cell.reviewLabel.text = reviewData.review.content
+        cell.starLabel.text = String(reviewData.review.rating)
+        cell.reviewDateLabel.text = formatCreateAt(reviewData.review.createdAt)
+
         return cell
     }
     
